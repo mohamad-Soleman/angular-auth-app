@@ -1,0 +1,52 @@
+<div class="login-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="form-toolbar">
+      <span>כניסה למערכת דוניאזאד</span>
+    </mat-toolbar>
+    <form #loginForm="ngForm" (ngSubmit)="login()" novalidate>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>שם משתמש</mat-label>
+        <input 
+          matInput 
+          placeholder="הכנס שם משתמש" 
+          autocomplete="username"
+          [(ngModel)]="username" 
+          name="username" 
+          required 
+          #usernameCtrl="ngModel">
+        <mat-error *ngIf="usernameCtrl.invalid && usernameCtrl.touched">שם משתמש הוא שדה חובה</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>סיסמה</mat-label>
+        <input 
+          matInput 
+          [type]="hidePassword ? 'password' : 'text'" 
+          placeholder="הכנס סיסמה" 
+          autocomplete="current-password"
+          [(ngModel)]="password" 
+          name="password" 
+          required 
+          #passwordCtrl="ngModel">
+        <button 
+          mat-icon-button 
+          matSuffix 
+          type="button" 
+          (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="passwordCtrl.invalid && passwordCtrl.touched">סיסמה הוא שדה חובה</mat-error>
+      </mat-form-field>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit" 
+        [disabled]="loginForm.invalid">
+        כניסה
+      </button>
+
+      <p *ngIf="error" class="error">{{ error }}</p>
+    </form>
+  </mat-card>
+</div>

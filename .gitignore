@@ -1,0 +1,17 @@
+# Node modules
+node_modules/
+
+# Angular cache
+.angular/
+
+# Compiled output
+dist/
+out-tsc/
+
+# IDE files
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db

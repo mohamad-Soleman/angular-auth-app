@@ -1,0 +1,90 @@
+<div class="add-user-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="form-toolbar">
+      <span>הוסף משתמש חדש</span>
+    </mat-toolbar>
+
+    <form #userForm="ngForm" (ngSubmit)="addUser(userForm)" novalidate>
+      <div class="form-field">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>שם משתמש</mat-label>
+          <input
+            matInput
+            [(ngModel)]="username"
+            name="username"
+            required
+            minlength="4"
+            #usernameCtrl="ngModel"
+          />
+          <mat-error *ngIf="usernameCtrl.invalid && usernameCtrl.touched">
+            <span *ngIf="usernameCtrl.errors?.required">שדה חובה</span>
+            <span *ngIf="usernameCtrl.errors?.minlength">מינימום 4 תווים</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>מייל</mat-label>
+          <input
+            matInput
+            [(ngModel)]="email"
+            name="email"
+            required
+            email
+            #emailCtrl="ngModel"
+          />
+          <mat-error *ngIf="emailCtrl.invalid && emailCtrl.touched">
+            <span *ngIf="emailCtrl.errors?.required">שדה חובה</span>
+            <span *ngIf="emailCtrl.errors?.email">כתובת מייל לא תקינה</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>סיסמה</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            [(ngModel)]="password"
+            name="password"
+            required
+            minlength="6"
+            #passwordCtrl="ngModel"
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Toggle password visibility'"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="passwordCtrl.invalid && passwordCtrl.touched">
+            <span *ngIf="passwordCtrl.errors?.required">שדה חובה</span>
+            <span *ngIf="passwordCtrl.errors?.minlength">סיסמה חייבת להיות מינימום 6 תווים</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-checkbox color="primary" [(ngModel)]="isAdmin" name="isAdmin">מנהל</mat-checkbox>
+      </div>
+
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="userForm.invalid"
+        >
+          הוסף משתמש
+        </button>
+      </div>
+
+      <p *ngIf="message" class="info-message">{{ message }}</p>
+    </form>
+  </mat-card>
+</div>
