@@ -1,0 +1,93 @@
+<div class="order-form-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="form-toolbar">
+      <span>הוספת הזמנה חדשה</span>
+    </mat-toolbar>
+    <form #orderForm="ngForm" (ngSubmit)="addOrder(orderForm)" class="order-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>שם מלא</mat-label>
+          <input matInput [(ngModel)]="orderData.fullName" name="fullName" required>
+          <mat-error *ngIf="orderForm.controls['fullName']?.hasError('required')">שם מלא הוא שדה חובה</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>טלפון</mat-label>
+          <input matInput [(ngModel)]="orderData.phone" name="phone" required pattern="[0-9]{9,10}">
+          <mat-error *ngIf="orderForm.controls['phone']?.hasError('required')">טלפון הוא שדה חובה</mat-error>
+          <mat-error *ngIf="orderForm.controls['phone']?.hasError('pattern')">מספר טלפון לא תקין</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>טלפון נוסף</mat-label>
+          <input matInput [(ngModel)]="orderData.anotherPhone" name="anotherPhone" pattern="[0-9]{9,10}">
+          <mat-error *ngIf="orderForm.controls['anotherPhone']?.hasError('pattern')">מספר טלפון לא תקין</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>מספר אורחים</mat-label>
+          <input matInput type="number" [(ngModel)]="orderData.guests" name="guests" min="1" required>
+          <mat-error *ngIf="orderForm.controls['guests']?.hasError('required')">מספר אורחים הוא שדה חובה</mat-error>
+          <mat-error *ngIf="orderForm.controls['guests']?.hasError('min')">מספר אורחים חייב להיות לפחות 1</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>תאריך</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="orderData.date" name="date" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="orderForm.controls['date']?.hasError('required')">תאריך הוא שדה חובה</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>שעה</mat-label>
+          <input matInput type="time" [(ngModel)]="orderData.time" name="time" required>
+          <mat-error *ngIf="orderForm.controls['time']?.hasError('required')">שעה היא שדה חובה</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>סכום הזמנה</mat-label>
+          <input matInput type="number" [(ngModel)]="orderData.orderAmount" name="orderAmount" min="0" required>
+           <mat-error *ngIf="orderForm.controls['orderAmount']?.hasError('required')">סכום הזמנה הוא שדה חובה</mat-error>
+           <mat-error *ngIf="orderForm.controls['orderAmount']?.hasError('min')">סכום הזמנה חייב להיות חיובי</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>סכום ששולם</mat-label>
+          <input matInput type="number" [(ngModel)]="orderData.paidAmount" name="paidAmount" min="0" required>
+          <mat-error *ngIf="orderForm.controls['paidAmount']?.hasError('required')">סכום ששולם הוא שדה חובה</mat-error>
+          <mat-error *ngIf="orderForm.controls['paidAmount']?.hasError('min')">סכום ששולם חייב להיות חיובי</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="form-field-full-width">
+        <mat-label>סוג הזמנה</mat-label>
+        <mat-select [(ngModel)]="orderData.orderType" name="orderType" required>
+          <mat-option *ngFor="let type of orderTypes" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="orderForm.controls['orderType']?.hasError('required')">סוג הזמנה הוא שדה חובה</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field-full-width">
+        <mat-label>הערות</mat-label>
+        <textarea matInput [(ngModel)]="orderData.comments" name="comments" rows="3"></textarea>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!orderForm.valid">הוסף הזמנה</button>
+      </div>
+
+      <div *ngIf="message" class="message">
+        {{ message }}
+      </div>
+    </form>
+  </mat-card>
+</div>

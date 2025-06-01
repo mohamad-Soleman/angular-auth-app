@@ -11,6 +11,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
+import { AddOrderComponent } from './components/add-order/add-order.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
@@ -32,7 +37,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     HomeComponent,
     AdminPanelComponent,
     AddUserComponent,
-    NavbarComponent
+    NavbarComponent,
+    AddOrderComponent  
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,11 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     MatFormFieldModule,
     MatToolbarModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatNativeDateModule
   ],
   providers: [
     AuthService,
