@@ -12,15 +12,20 @@ export class AddOrderComponent {
     fullName: '',
     phone: '',
     anotherPhone: '',
-    guests: 0,
+    price: 0,
+    minGuests: 0,
+    maxGuests: 0,
     date: new Date(),
     time: '',
     orderAmount: 0,
-    amount: 0,
     paidAmount: 0,
     orderType: '',
     comments: ''
   };
+
+  updateOrderAmount() {
+  this.orderData.orderAmount = this.orderData.price * this.orderData.maxGuests;
+}
 
   orderTypes = ['type1', 'type2', 'type3'];
   message = '';
@@ -29,11 +34,13 @@ export class AddOrderComponent {
 
   addOrder(form: any) {
     if (form.valid) {
-      this.http.post(`${environment.apiBaseUrl}/orders`, this.orderData)
-        .subscribe((res: any) => {
-          this.message = res.message;
-          form.resetForm();
-        });
+      this.updateOrderAmount()
+      console.log('Order Data:', this.orderData);
+      // this.http.post(`${environment.apiBaseUrl}/orders`, this.orderData)
+      //   .subscribe((res: any) => {
+      //     this.message = res.message;
+      //     form.resetForm();
+      //   });
     }
   }
 }
