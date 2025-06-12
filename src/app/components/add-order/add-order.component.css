@@ -33,8 +33,21 @@
 }
 
 .form-field {
-  flex: 1 1 calc(50% - 8px); /* Two fields per row, accounting for gap */
-  min-width: 250px; /* Minimum width for smaller screens */
+  flex: 1 1 calc(33.333% - 11px); /* Three fields per row, accounting for gap */
+  min-width: 200px; /* Minimum width for smaller screens */
+}
+
+.time-error {
+  color: #f44336;
+  font-size: 12px;
+  margin: -8px 0 16px 0;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+}
+
+.time-error mat-error {
+  margin-right: 8px;
 }
 
 .form-field-full-width {
@@ -65,6 +78,14 @@
   .form-field {
     flex: 1 1 100%; /* Full width for fields on small screens */
     margin-bottom: 16px; /* Add margin between stacked fields */
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .time-error {
+    margin: -4px 0 20px 0;
   }
 
   .order-form-container {

@@ -10,12 +10,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-
+import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AddOrderComponent } from './components/add-order/add-order.component';
+import { OrdersCalendarComponent } from './components/orders-calendar/orders-calendar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
@@ -38,7 +39,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     AdminPanelComponent,
     AddUserComponent,
     NavbarComponent,
-    AddOrderComponent  
+    AddOrderComponent,
+    OrdersCalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     MatDatepickerModule,
     MatSelectModule,
     MatOptionModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    FullCalendarModule
   ],
   providers: [
     AuthService,

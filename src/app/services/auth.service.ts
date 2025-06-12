@@ -11,11 +11,11 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(data: any) {
-    return this.http.post(`${environment.apiBaseUrl}/login`, data);
+    return this.http.post(`${environment.apiBaseUrl}/auth/login`, data);
   }
 
   logout() {
-    this.http.get(`${environment.apiBaseUrl}/logout`, {})
+    this.http.get(`${environment.apiBaseUrl}/auth/logout`, {})
       .subscribe({
         next: () => {
           localStorage.removeItem('access_token');
@@ -58,7 +58,7 @@ export class AuthService {
       this.router.navigate(['/login']);
       return of(false);
     }
-    return this.http.get(`${environment.apiBaseUrl}/verify`, { observe: 'response' }).pipe(
+    return this.http.get(`${environment.apiBaseUrl}/auth/verify`, { observe: 'response' }).pipe(
       map(response => response.status === 200), 
       catchError(() => of(false))
     );
@@ -72,7 +72,7 @@ export class AuthService {
       throw new Error('No refresh token found');
     }
 
-    return this.http.get<any>(`${environment.apiBaseUrl}/refresh`, {
+    return this.http.get<any>(`${environment.apiBaseUrl}/auth/refresh`, {
       headers: {
         Authorization: `Bearer ${refreshToken}`
       }

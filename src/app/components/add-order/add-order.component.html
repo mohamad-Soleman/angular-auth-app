@@ -77,10 +77,22 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>שעה</mat-label>
-          <input matInput type="time" [(ngModel)]="orderData.time" name="time" required>
-          <mat-error *ngIf="orderForm.controls['time']?.hasError('required')">שעה היא שדה חובה</mat-error>
+          <mat-label>שעת התחלה</mat-label>
+          <input matInput type="time" [(ngModel)]="orderData.startTime" name="startTime" required
+                 (ngModelChange)="validateTimes()">
+          <mat-error *ngIf="orderForm.controls['startTime']?.hasError('required')">שעת התחלה היא שדה חובה</mat-error>
         </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>שעת סיום</mat-label>
+          <input matInput type="time" [(ngModel)]="orderData.endTime" name="endTime" required
+                 (ngModelChange)="validateTimes()">
+          <mat-error *ngIf="orderForm.controls['endTime']?.hasError('required')">שעת סיום היא שדה חובה</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="orderData.startTime && orderData.endTime && !validateTimes()" class="time-error">
+        <mat-error>שעת הסיום חייבת להיות מאוחרת יותר משעת ההתחלה</mat-error>
       </div>
 
       <mat-form-field appearance="outline" class="form-field-full-width">

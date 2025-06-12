@@ -1,0 +1,127 @@
+<div class="calendar-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="calendar-toolbar">
+      <span>לוח הזמנות</span>
+    </mat-toolbar>
+    
+    <!-- Calendar Component -->
+    <div class="calendar-wrapper">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </mat-card>
+
+  <!-- Event Details Modal -->
+  <div class="event-details-overlay" *ngIf="showEventDetails" (click)="closeEventDetails()">
+    <mat-card class="event-details-card" (click)="$event.stopPropagation()">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>event</mat-icon>
+          פרטי הזמנה
+        </mat-card-title>
+        <button mat-icon-button (click)="closeEventDetails()" class="close-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      
+      <mat-card-content *ngIf="selectedEvent">
+        <div class="event-info">
+          <div class="info-row">
+            <mat-icon>person</mat-icon>
+            <span class="label">שם מלא:</span>
+            <span class="value">{{ selectedEvent.extendedProps.fullName }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>phone</mat-icon>
+            <span class="label">טלפון:</span>
+            <span class="value">{{ selectedEvent.extendedProps.phone }}</span>
+          </div>
+          
+          <div class="info-row" *ngIf="selectedEvent.extendedProps.anotherPhone">
+            <mat-icon>phone</mat-icon>
+            <span class="label">טלפון נוסף:</span>
+            <span class="value">{{ selectedEvent.extendedProps.anotherPhone }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>category</mat-icon>
+            <span class="label">סוג אירוע:</span>
+            <span class="value">{{ selectedEvent.extendedProps.orderType }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>group</mat-icon>
+            <span class="label">מינימום אורחים:</span>
+            <span class="value">{{ selectedEvent.extendedProps.minGuests }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>group</mat-icon>
+            <span class="label">מקסימום אורחים:</span>
+            <span class="value">{{ selectedEvent.extendedProps.maxGuests }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>attach_money</mat-icon>
+            <span class="label">מחיר ליחידה:</span>
+            <span class="value">₪{{ selectedEvent.extendedProps.price }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>calculate</mat-icon>
+            <span class="label">סכום כולל:</span>
+            <span class="value">₪{{ selectedEvent.extendedProps.orderAmount }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>payment</mat-icon>
+            <span class="label">סכום ששולם:</span>
+            <span class="value">₪{{ selectedEvent.extendedProps.paidAmount }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <span class="label">יתרה לתשלום:</span>
+            <span class="value">₪{{ getRemainingAmount(selectedEvent) }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>info</mat-icon>
+            <span class="label">סטטוס תשלום:</span>
+            <span class="value status" [style.color]="getStatusColor(selectedEvent)">
+              {{ getStatusText(selectedEvent) }}
+            </span>
+          </div>
+          
+          <div class="info-row" *ngIf="selectedEvent.extendedProps.comments">
+            <mat-icon>comment</mat-icon>
+            <span class="label">הערות:</span>
+            <span class="value">{{ selectedEvent.extendedProps.comments }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>event</mat-icon>
+            <span class="label">תאריך:</span>
+            <span class="value">{{ selectedEvent.start | date:'dd/MM/yyyy' }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>schedule</mat-icon>
+            <span class="label">שעת התחלה:</span>
+            <span class="value">{{ selectedEvent.start | date:'HH:mm' }}</span>
+          </div>
+          
+          <div class="info-row">
+            <mat-icon>schedule</mat-icon>
+            <span class="label">שעת סיום:</span>
+            <span class="value">{{ selectedEvent.end | date:'HH:mm' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions align="end">
+        <button mat-button (click)="closeEventDetails()">סגור</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

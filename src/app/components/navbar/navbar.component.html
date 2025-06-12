@@ -1,8 +1,10 @@
 <mat-toolbar color="primary">
   <button mat-button (click)="goHome()" routerLink="/home" *ngIf="this.auth.hasToken()">דף הבית</button>
+  <button mat-button routerLink="/orders-calendar" *ngIf="this.auth.hasToken()">לוח הזמנות</button>
   <button mat-button routerLink="/admin" *ngIf="auth.isAdmin()">מנהל</button>
   <button mat-button routerLink="/add-user" *ngIf="auth.isAdmin()">הוסף משתמש</button>
   <button mat-button routerLink="/add-order" *ngIf="auth.isAdmin()">הוסף הזמנה</button>
   <span class="spacer"></span>
+  <button mat-button routerLink="/login" *ngIf="!this.auth.hasToken()">התחברות</button>
   <button mat-button (click)="logout()" *ngIf="this.auth.hasToken()">יציאה</button>
 </mat-toolbar>

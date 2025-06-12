@@ -21,7 +21,7 @@ export class AddUserComponent {
 
   addUser(form: any) {
     if (form.valid) {
-    this.http.post(`${environment.apiBaseUrl}/register`, {
+    this.http.post(`${environment.apiBaseUrl}/auth/register`, {
       username: this.username,
       email: this.email,
       password: this.password,
