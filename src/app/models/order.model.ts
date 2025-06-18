@@ -57,10 +57,9 @@ export const orderToEventMapper = (order: Order): OrderEvent => ({
 // Order types enumeration
 export enum OrderType {
   WEDDING = 'חתונה',
-  BAR_MITZVAH = 'בר מצווה',
+  ENGAGMENT = 'אירוסין ',
   BIRTHDAY = 'יום הולדת',
   CORPORATE = 'אירוע עסקי',
-  BRIT = 'ברית מילה',
   OTHER = 'אחר'
 }
 

@@ -1,7 +1,7 @@
 import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { catchError, from, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
   const authService = inject(AuthService);
@@ -21,9 +21,9 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      // If access token is invalid and this is NOT a refresh request — try refreshing
-      if (error.status === 401 && !req.url.includes('/refresh')) {
-        return from(authService.refreshToken()).pipe(
+      // If access token is invalid and this is NOT a refresh or logout request — try refreshing
+      if (error.status === 401 && !req.url.includes('/refresh') && !req.url.includes('/logout')) {
+        return authService.refreshToken().pipe(
           switchMap((newAccessToken: string) => {
             localStorage.setItem('access_token', newAccessToken);
 
@@ -36,8 +36,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
             return next(retryReq);
           }),
           catchError(refreshError => {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
+            authService.logoutLocally();
             return throwError(() => refreshError);
           })
         );

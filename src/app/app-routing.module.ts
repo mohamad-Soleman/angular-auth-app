@@ -9,10 +9,11 @@ import { OrdersCalendarComponent } from './components/orders-calendar/orders-cal
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard,AdminGuard] },
   { path: 'add-user', component: AddUserComponent, canActivate: [AuthGuard,AdminGuard] },

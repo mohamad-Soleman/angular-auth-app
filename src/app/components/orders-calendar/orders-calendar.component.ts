@@ -44,10 +44,9 @@ export class OrdersCalendarComponent implements OnInit {
   // Order type colors
   private orderTypeColors = {
     [OrderType.WEDDING]: { background: '#4CAF50', border: '#388E3C' },
-    [OrderType.BAR_MITZVAH]: { background: '#2196F3', border: '#1976D2' },
+    [OrderType.ENGAGMENT]: { background: '#2196F3', border: '#1976D2' },
     [OrderType.BIRTHDAY]: { background: '#FF9800', border: '#F57C00' },
     [OrderType.CORPORATE]: { background: '#9C27B0', border: '#7B1FA2' },
-    [OrderType.BRIT]: { background: '#FF5722', border: '#D84315' },
     [OrderType.OTHER]: { background: '#607D8B', border: '#455A64' }
   };
 
