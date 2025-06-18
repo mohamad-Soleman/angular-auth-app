@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { environment } from '../config/environment';
+import { environment } from '../../environments/environment';
 import { Order } from '../models/order.model';
 
 interface OrderResponse {
@@ -29,10 +29,6 @@ export class OrderService {
 
   addOrder(orderData: Order): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}/orders/addorder`, orderData);
-  }
-
-  private formatDateToIsrael(date: string): string {
-    return new Date(date).toLocaleString('en-US', { timeZone: 'Asia/Jerusalem' }).split(',')[0];
   }
 
   getAllOrders(): Observable<Order[]> {

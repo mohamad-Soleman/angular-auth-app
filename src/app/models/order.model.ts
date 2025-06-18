@@ -35,25 +35,6 @@ export interface OrderEvent {
   };
 }
 
-export const orderToEventMapper = (order: Order): OrderEvent => ({
-  id: order.id || '',
-  title: `${order.orderType} - ${order.fullName}`,
-  start: `${order.date}T${order.startTime}`,
-  end: `${order.date}T${order.endTime}`,
-  extendedProps: {
-    fullName: order.fullName,
-    phone: order.phone,
-    anotherPhone: order.anotherPhone,
-    price: order.price,
-    minGuests: order.minGuests,
-    maxGuests: order.maxGuests,
-    orderType: order.orderType,
-    orderAmount: order.orderAmount,
-    paidAmount: order.paidAmount,
-    comments: order.comments
-  }
-});
-
 // Order types enumeration
 export enum OrderType {
   WEDDING = 'חתונה',

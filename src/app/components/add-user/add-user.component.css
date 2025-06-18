@@ -3,11 +3,6 @@
     margin: 40px auto;
   }
   
-  .form-card {
-    overflow: hidden;
-    padding: 0;
-  }
-  
   .form-toolbar {
     width: 100%;
     border-top-left-radius: 4px;
