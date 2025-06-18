@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { AddOrderComponent } from './components/add-order/add-order.component';
 import { OrdersCalendarComponent } from './components/orders-calendar/orders-calendar.component';
+import { SearchOrdersComponent } from './components/search-orders/search-orders.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'add-user', component: AddUserComponent, canActivate: [AuthGuard,AdminGuard] },
   { path: 'add-order', component: AddOrderComponent, canActivate: [AuthGuard,AdminGuard] },
   { path: 'orders-calendar', component: OrdersCalendarComponent, canActivate: [AuthGuard] },
+  { path: 'search-orders', component: SearchOrdersComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

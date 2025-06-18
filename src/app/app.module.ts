@@ -15,8 +15,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AddOrderComponent } from './components/add-order/add-order.component';
 import { OrdersCalendarComponent } from './components/orders-calendar/orders-calendar.component';
+import { SearchOrdersComponent } from './components/search-orders/search-orders.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
@@ -40,7 +43,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     AddUserComponent,
     NavbarComponent,
     AddOrderComponent,
-    OrdersCalendarComponent
+    OrdersCalendarComponent,
+    SearchOrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +63,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     MatSelectModule,
     MatOptionModule,
     MatNativeDateModule,
+    MatExpansionModule,
+    MatProgressSpinnerModule,
     FullCalendarModule
   ],
   providers: [

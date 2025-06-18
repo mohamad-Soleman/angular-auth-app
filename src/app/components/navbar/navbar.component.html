@@ -1,6 +1,7 @@
 <mat-toolbar color="primary">
   <button mat-button (click)="goHome()" routerLink="/home" *ngIf="this.auth.hasToken()">דף הבית</button>
   <button mat-button routerLink="/orders-calendar" *ngIf="this.auth.hasToken()">לוח הזמנות</button>
+  <button mat-button routerLink="/search-orders" *ngIf="this.auth.hasToken()">חיפוש הזמנות</button>
   <button mat-button routerLink="/admin" *ngIf="auth.isAdmin()">מנהל</button>
   <button mat-button routerLink="/add-user" *ngIf="auth.isAdmin()">הוסף משתמש</button>
   <button mat-button routerLink="/add-order" *ngIf="auth.isAdmin()">הוסף הזמנה</button>

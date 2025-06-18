@@ -1,0 +1,148 @@
+<div class="search-orders-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="page-toolbar">
+      <span>חיפוש הזמנות</span>
+    </mat-toolbar>
+
+    <!-- Loading indicator -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>טוען הזמנות...</p>
+    </div>
+
+    <!-- Error message -->
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Orders list -->
+    <div *ngIf="!loading && !error" class="orders-container">
+      <mat-accordion *ngIf="orders.length > 0; else noOrders">
+        <mat-expansion-panel 
+          *ngFor="let order of orders; trackBy: trackByOrderId" 
+          class="order-panel">
+          
+          <!-- Panel Header -->
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="panel-title">
+                <mat-icon class="panel-icon">event</mat-icon>
+                <span class="order-title">{{ order.orderType }} - {{ order.fullName }}</span>
+                <span class="order-date">{{ formatDate(order.date) }}</span>
+              </div>
+            </mat-panel-title>
+            <mat-panel-description>
+              <div class="panel-description">
+                <span class="status-badge" [style.background-color]="getOrderStatus(order).color">
+                  {{ getOrderStatus(order).text }}
+                </span>
+                <span class="order-amount">₪{{ order.orderAmount }}</span>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <!-- Panel Content -->
+          <div class="order-details">
+            <div class="details-grid">
+              <div class="detail-row">
+                <mat-icon>person</mat-icon>
+                <span class="label">שם מלא:</span>
+                <span class="value">{{ order.fullName }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>phone</mat-icon>
+                <span class="label">טלפון:</span>
+                <span class="value">{{ order.phone }}</span>
+              </div>
+
+              <div class="detail-row" *ngIf="order.anotherPhone">
+                <mat-icon>phone</mat-icon>
+                <span class="label">טלפון נוסף:</span>
+                <span class="value">{{ order.anotherPhone }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>category</mat-icon>
+                <span class="label">סוג אירוע:</span>
+                <span class="value">{{ order.orderType }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>event</mat-icon>
+                <span class="label">תאריך:</span>
+                <span class="value">{{ formatDate(order.date) }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>schedule</mat-icon>
+                <span class="label">שעת התחלה:</span>
+                <span class="value">{{ formatTime(order.startTime) }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>schedule</mat-icon>
+                <span class="label">שעת סיום:</span>
+                <span class="value">{{ formatTime(order.endTime) }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>group</mat-icon>
+                <span class="label">מספר אורחים:</span>
+                <span class="value">{{ order.minGuests }} - {{ order.maxGuests }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>attach_money</mat-icon>
+                <span class="label">מחיר ליחידה:</span>
+                <span class="value">₪{{ order.price }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>calculate</mat-icon>
+                <span class="label">סכום כולל:</span>
+                <span class="value">₪{{ order.orderAmount }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>payment</mat-icon>
+                <span class="label">סכום ששולם:</span>
+                <span class="value">₪{{ order.paidAmount }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>account_balance_wallet</mat-icon>
+                <span class="label">יתרה לתשלום:</span>
+                <span class="value">₪{{ getRemainingAmount(order) }}</span>
+              </div>
+
+              <div class="detail-row">
+                <mat-icon>info</mat-icon>
+                <span class="label">סטטוס תשלום:</span>
+                <span class="value status-text" [style.color]="getOrderStatus(order).color">
+                  {{ getOrderStatus(order).text }}
+                </span>
+              </div>
+
+              <div class="detail-row" *ngIf="order.comments">
+                <mat-icon>comment</mat-icon>
+                <span class="label">הערות:</span>
+                <span class="value">{{ order.comments }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <!-- No orders message -->
+      <ng-template #noOrders>
+        <div class="no-orders">
+          <mat-icon class="no-orders-icon">inbox</mat-icon>
+          <h3>אין הזמנות להצגה</h3>
+          <p>לא נמצאו הזמנות במערכת</p>
+        </div>
+      </ng-template>
+    </div>
+  </mat-card>
+</div>
