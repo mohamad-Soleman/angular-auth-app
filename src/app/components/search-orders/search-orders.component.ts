@@ -14,15 +14,14 @@ export class SearchOrdersComponent implements OnInit {
   searching = false;
   
   // Search form data
-  
-  // Search form data
   startDate: Date | null = null;
   endDate: Date | null = null;
+  hasSearched = false;
 
   constructor(private orderService: OrderService) {}
 
   ngOnInit() {
-    this.loadOrders();
+    // Don't load orders automatically - wait for search
   }
 
   loadOrders() {
@@ -36,6 +35,41 @@ export class SearchOrdersComponent implements OnInit {
         this.error = 'שגיאה בטעינת ההזמנות';
         this.loading = false;
         console.error('Error loading orders:', err);
+      }
+    });
+  }
+
+  searchOrders() {
+    if (!this.startDate || !this.endDate) {
+      this.error = 'יש להזין תאריך התחלה ותאריך סיום';
+      return;
+    }
+
+    if (this.startDate > this.endDate) {
+      this.error = 'תאריך ההתחלה חייב להיות לפני תאריך הסיום';
+      return;
+    }
+
+    this.searching = true;
+    this.loading = true;
+    this.error = '';
+    this.hasSearched = true;
+
+    // Format dates to YYYY-MM-DD
+    const startDateString = this.formatDateForAPI(this.startDate);
+    const endDateString = this.formatDateForAPI(this.endDate);
+
+    this.orderService.searchOrders(startDateString, endDateString).subscribe({
+      next: (orders) => {
+        this.orders = this.sortOrdersByDate(orders);
+        this.searching = false;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'שגיאה בחיפוש ההזמנות';
+        this.searching = false;
+        this.loading = false;
+        console.error('Error searching orders:', err);
       }
     });
   }
@@ -54,6 +88,10 @@ export class SearchOrdersComponent implements OnInit {
 
   getRemainingAmount(order: Order): number {
     return order.orderAmount - order.paidAmount;
+  }
+
+  formatDateForAPI(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 
   trackByOrderId(index: number, order: Order): string {

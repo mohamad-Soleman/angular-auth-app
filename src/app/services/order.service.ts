@@ -52,4 +52,30 @@ export class OrderService {
         })))
       );
   }
+
+  searchOrders(startDate: string, endDate: string): Observable<Order[]> {
+    const searchData = {
+      startDate: startDate,
+      endDate: endDate
+    };
+    return this.http.post<OrderResponse[]>(`${environment.apiBaseUrl}/orders/getorders`, searchData)
+      .pipe(
+        map(orders => orders.map(order => ({
+          id: order.id,
+          fullName: order.full_name,
+          phone: order.phone,
+          anotherPhone: order.another_phone,
+          price: order.price,
+          minGuests: order.min_guests,
+          maxGuests: order.max_guests,
+          date: order.date,
+          startTime: order.start_time,
+          endTime: order.end_time,
+          orderAmount: order.order_amount,
+          paidAmount: order.paid_amount,
+          orderType: order.order_type,
+          comments: order.comments
+        })))
+      );
+  }
 }
