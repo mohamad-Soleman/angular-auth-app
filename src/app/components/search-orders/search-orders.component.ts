@@ -91,7 +91,12 @@ export class SearchOrdersComponent implements OnInit {
   }
 
   formatDateForAPI(date: Date): string {
-    return date.toISOString().split('T')[0];
+    const selectedDate = new Date(date);
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    const israelDateString = `${year}-${month}-${day}`;
+    return israelDateString
   }
 
   trackByOrderId(index: number, order: Order): string {
