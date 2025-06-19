@@ -3,14 +3,14 @@ export interface Order {
   fullName: string;
   phone: string;
   anotherPhone: string;
-  price: number;
+  price?: number;  // Optional for non-admin users
   minGuests: number;
   maxGuests: number;
   date: string;  // Expected format: YYYY-MM-DDTHH:mm:ss.sssZ
   startTime: string;
   endTime: string;
-  orderAmount: number;
-  paidAmount: number;
+  orderAmount?: number;  // Optional for non-admin users
+  paidAmount?: number;   // Optional for non-admin users
   orderType: string;
   comments?: string;
 }
@@ -25,12 +25,12 @@ export interface OrderEvent {
     fullName: string;
     phone: string;
     anotherPhone: string;
-    price: number;
+    price?: number;     // Optional for non-admin users
     minGuests: number;
     maxGuests: number;
     orderType: string;
-    orderAmount: number;
-    paidAmount: number;
+    orderAmount?: number;  // Optional for non-admin users
+    paidAmount?: number;   // Optional for non-admin users
     comments?: string;
   };
 }
@@ -45,7 +45,10 @@ export enum OrderType {
 }
 
 // Order status helper
-export const getOrderStatus = (paidAmount: number, orderAmount: number): { text: string; color: string } => {
+export const getOrderStatus = (paidAmount?: number, orderAmount?: number): { text: string; color: string } => {
+  if (paidAmount === undefined || orderAmount === undefined) {
+    return { text: '', color: '' };
+  }
   if (paidAmount >= orderAmount) {
     return { text: 'שולם במלואו', color: '#4CAF50' };
   } else if (paidAmount > 0) {

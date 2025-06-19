@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Order, OrderEvent, OrderType, getOrderStatus } from '../../models/order.model';
 import { OrderService } from '../../services/order.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-orders-calendar',
@@ -50,7 +51,10 @@ export class OrdersCalendarComponent implements OnInit {
     [OrderType.OTHER]: { background: '#607D8B', border: '#455A64' }
   };
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.calendarOptions.eventContent = (arg: any) => {
@@ -109,6 +113,13 @@ export class OrdersCalendarComponent implements OnInit {
   }
 
   getRemainingAmount(order: OrderEvent): number {
+    if (order.extendedProps.orderAmount === undefined || order.extendedProps.paidAmount === undefined) {
+      return 0;
+    }
     return order.extendedProps.orderAmount - order.extendedProps.paidAmount;
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

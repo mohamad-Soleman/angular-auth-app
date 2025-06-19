@@ -62,10 +62,10 @@
               <div class="panel-header-content">
                 <span class="order-date">{{ formatDate(order.date) }}</span>
                 <div class="panel-description">
-                  <span class="status-badge" [style.background-color]="getOrderStatus(order).color">
+                  <span class="status-badge" *ngIf="isAdmin() && getOrderStatus(order).text" [style.background-color]="getOrderStatus(order).color">
                     {{ getOrderStatus(order).text }}
                   </span>
-                  <span class="order-amount">₪{{ order.orderAmount }}</span>
+                  <span class="order-amount" *ngIf="isAdmin() && order.orderAmount !== undefined">₪{{ order.orderAmount }}</span>
                 </div>
               </div>
             </mat-panel-description>
@@ -106,14 +106,8 @@
 
               <div class="detail-row">
                 <mat-icon>schedule</mat-icon>
-                <span class="label">שעת התחלה:</span>
-                <span class="value">{{ formatTime(order.startTime) }}</span>
-              </div>
-
-              <div class="detail-row">
-                <mat-icon>schedule</mat-icon>
-                <span class="label">שעת סיום:</span>
-                <span class="value">{{ formatTime(order.endTime) }}</span>
+                <span class="label">שעות האירוע:</span>
+                <span class="value">{{ formatTime(order.startTime) }} - {{ formatTime(order.endTime) }}</span>
               </div>
 
               <div class="detail-row">
@@ -122,31 +116,31 @@
                 <span class="value">{{ order.minGuests }} - {{ order.maxGuests }}</span>
               </div>
 
-              <div class="detail-row">
+              <div class="detail-row" *ngIf="isAdmin() && order.price !== undefined">
                 <mat-icon>attach_money</mat-icon>
-                <span class="label">מחיר ליחידה:</span>
+                <span class="label">מחיר:</span>
                 <span class="value">₪{{ order.price }}</span>
               </div>
 
-              <div class="detail-row">
+              <div class="detail-row" *ngIf="isAdmin() && order.orderAmount !== undefined">
                 <mat-icon>calculate</mat-icon>
                 <span class="label">סכום כולל:</span>
                 <span class="value">₪{{ order.orderAmount }}</span>
               </div>
 
-              <div class="detail-row">
+              <div class="detail-row" *ngIf="isAdmin() && order.paidAmount !== undefined">
                 <mat-icon>payment</mat-icon>
                 <span class="label">סכום ששולם:</span>
                 <span class="value">₪{{ order.paidAmount }}</span>
               </div>
 
-              <div class="detail-row">
+              <div class="detail-row" *ngIf="isAdmin() && order.orderAmount !== undefined && order.paidAmount !== undefined">
                 <mat-icon>account_balance_wallet</mat-icon>
                 <span class="label">יתרה לתשלום:</span>
                 <span class="value">₪{{ getRemainingAmount(order) }}</span>
               </div>
 
-              <div class="detail-row">
+              <div class="detail-row" *ngIf="isAdmin() && order.paidAmount !== undefined && order.orderAmount !== undefined && getOrderStatus(order).text">
                 <mat-icon>info</mat-icon>
                 <span class="label">סטטוס תשלום:</span>
                 <span class="value status-text" [style.color]="getOrderStatus(order).color">

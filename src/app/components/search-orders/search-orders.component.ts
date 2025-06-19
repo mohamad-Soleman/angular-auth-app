@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
+import { AuthService } from '../../services/auth.service';
 import { Order, getOrderStatus } from '../../models/order.model';
 
 @Component({
@@ -18,7 +19,10 @@ export class SearchOrdersComponent implements OnInit {
   endDate: Date | null = null;
   hasSearched = false;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     // Don't load orders automatically - wait for search
@@ -78,6 +82,10 @@ export class SearchOrdersComponent implements OnInit {
     return getOrderStatus(order.paidAmount, order.orderAmount);
   }
 
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('he-IL');
   }
@@ -87,6 +95,9 @@ export class SearchOrdersComponent implements OnInit {
   }
 
   getRemainingAmount(order: Order): number {
+    if (order.orderAmount === undefined || order.paidAmount === undefined) {
+      return 0;
+    }
     return order.orderAmount - order.paidAmount;
   }
 
