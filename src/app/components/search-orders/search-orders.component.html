@@ -154,6 +154,14 @@
                 <span class="value">{{ order.comments }}</span>
               </div>
             </div>
+            <!-- Admin Actions -->
+            <div *ngIf="isAdmin()" class="admin-actions">
+              <button mat-raised-button color="accent" (click)="editOrder(order)" class="edit-button">
+                <mat-icon>edit</mat-icon>
+                ערוך הזמנה
+              </button>
+            </div>
+          
           </div>
         </mat-expansion-panel>
       </mat-accordion>

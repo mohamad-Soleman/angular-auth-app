@@ -111,7 +111,7 @@
       </mat-form-field>
 
       <div class="form-actions">
-        <button mat-raised-button color="primary" type="submit" [disabled]="!orderForm.valid">הוסף הזמנה</button>
+        <button mat-raised-button [color]="isEditMode ? 'warn' : 'primary'" type="submit" [disabled]="!orderForm.valid">{{ this.buttonText }}</button>
       </div>
 
       <div *ngIf="message" class="message">

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { Order, getOrderStatus } from '../../models/order.model';
@@ -21,7 +22,8 @@ export class SearchOrdersComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -123,5 +125,12 @@ export class SearchOrdersComponent implements OnInit {
       // Sort in ascending order (oldest first)
       return dateA.getTime() - dateB.getTime();
     });
+  }
+
+  editOrder(order: Order) {
+    // Store the order data for editing
+    localStorage.setItem('editingOrder', JSON.stringify(order));
+    // Navigate to add-order component for editing
+    this.router.navigate(['/add-order'], { queryParams: { edit: 'true' } });
   }
 }
