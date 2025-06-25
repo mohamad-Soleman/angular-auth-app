@@ -112,6 +112,7 @@
 
       <div class="form-actions">
         <button mat-raised-button [color]="isEditMode ? 'warn' : 'primary'" type="submit" [disabled]="!orderForm.valid">{{ this.buttonText }}</button>
+        <button *ngIf="isEditMode" mat-raised-button color="warn" type="button" (click)="onDelete()" >מחיקה</button>
       </div>
 
       <div *ngIf="message" class="message">

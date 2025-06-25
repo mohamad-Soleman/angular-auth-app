@@ -121,5 +121,21 @@ export class AddOrderComponent implements OnInit {
       }
     }
   }
+  onDelete(){
+    if (this.isEditMode) {
+        const orderToUpdate = {
+          ...this.orderData,
+        };
+        this.orderService.deactivateOrder(orderToUpdate)
+          .subscribe((res: any) => {
+            this.message = res.message;
+          });
+        this.isEditMode = false;
+        this.router.navigate(['/search-orders']); 
+      } else {
+        console.log("no edit mode found");
+        this.router.navigate(['/search-orders']); 
+      }
+  }
 }
 

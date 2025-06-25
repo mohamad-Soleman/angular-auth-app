@@ -35,6 +35,10 @@ export class OrderService {
     return this.http.put(`${environment.apiBaseUrl}/orders/editorder`, orderData);
   }
 
+  deactivateOrder(orderData: Order): Observable<any> {
+    return this.http.put(`${environment.apiBaseUrl}/orders/deactivateorder`, orderData);
+  }
+
   getAllOrders(): Observable<Order[]> {
     return this.http.get<OrderResponse[]>(`${environment.apiBaseUrl}/orders/getorders`)
       .pipe(
