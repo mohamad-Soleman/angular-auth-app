@@ -5,6 +5,12 @@ import { CategoryService } from '../../services/category.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+interface CategoryGroup {
+  categoryId: string;
+  categoryName: string;
+  subCategories: SubCategory[];
+}
+
 @Component({
   selector: 'app-add-sub-category',
   templateUrl: './add-sub-category.component.html',
@@ -14,6 +20,7 @@ export class AddSubCategoryComponent implements OnInit, OnDestroy {
   subCategoryForm: FormGroup;
   categories: Category[] = [];
   subCategories: SubCategory[] = [];
+  groupedSubCategories: CategoryGroup[] = [];
   message: string = '';
   messageType: 'success' | 'error' = 'success';
   isLoading: boolean = false;
@@ -39,6 +46,7 @@ export class AddSubCategoryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(subCategories => {
         this.subCategories = subCategories;
+        this.groupSubCategories();
       });
   }
 
@@ -61,6 +69,29 @@ export class AddSubCategoryComponent implements OnInit, OnDestroy {
 
   loadSubCategories(): void {
     this.subCategoryService.loadSubCategories();
+  }
+
+  groupSubCategories(): void {
+    const groups: { [key: string]: CategoryGroup } = {};
+    
+    this.subCategories.forEach(subCategory => {
+      const categoryId = subCategory.parent_category_id;
+      const categoryName = subCategory.parent_category_name;
+      
+      if (!groups[categoryId]) {
+        groups[categoryId] = {
+          categoryId: categoryId,
+          categoryName: categoryName,
+          subCategories: []
+        };
+      }
+      
+      groups[categoryId].subCategories.push(subCategory);
+    });
+    
+    this.groupedSubCategories = Object.values(groups).sort((a, b) =>
+      a.categoryName.localeCompare(b.categoryName)
+    );
   }
 
   onSubmit(): void {

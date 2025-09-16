@@ -61,28 +61,39 @@
     </mat-card-header>
     
     <mat-card-content>
-      <div *ngIf="subCategories.length === 0" class="no-sub-categories">
+      <div *ngIf="groupedSubCategories.length === 0" class="no-sub-categories">
         <mat-icon>info</mat-icon>
         <p>לא נמצאו תת-קטגוריות</p>
       </div>
       
-      <div *ngIf="subCategories.length > 0" class="sub-categories-list">
-        <div *ngFor="let subCategory of subCategories" class="sub-category-item">
-          <div class="sub-category-content">
-            <mat-icon matListItemIcon>subdirectory_arrow_right</mat-icon>
-            <div class="sub-category-text">
-              <p class="sub-category-name">{{ subCategory.name }}</p>
-              <p class="sub-category-parent">קטגוריית אב: {{ subCategory.parent_category_name }}</p>
+      <mat-accordion *ngIf="groupedSubCategories.length > 0" class="sub-categories-accordion">
+        <mat-expansion-panel *ngFor="let categoryGroup of groupedSubCategories" class="category-panel">
+          <mat-expansion-panel-header class="category-header">
+            <mat-panel-title class="category-title">
+              <mat-icon>category</mat-icon>
+              <span>{{ categoryGroup.categoryName }}</span>
+            </mat-panel-title>
+            <mat-panel-description class="category-description">
+              {{ categoryGroup.subCategories.length }} תת-קטגוריות
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          
+          <div class="sub-categories-content">
+            <div *ngFor="let subCategory of categoryGroup.subCategories" class="sub-category-item">
+              <div class="sub-category-info">
+                <mat-icon class="sub-category-icon">subdirectory_arrow_right</mat-icon>
+                <span class="sub-category-name">{{ subCategory.name }}</span>
+              </div>
+              <div class="sub-category-actions">
+                <button mat-icon-button color="warn" (click)="deleteSubCategory(subCategory.id)"
+                        matTooltip="מחק תת-קטגוריה">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
-          <div class="sub-category-actions">
-            <button mat-icon-button color="warn" (click)="deleteSubCategory(subCategory.id)"
-                    matTooltip="מחק תת-קטגוריה">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </div>
-      </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </mat-card-content>
   </mat-card>
 </div>
