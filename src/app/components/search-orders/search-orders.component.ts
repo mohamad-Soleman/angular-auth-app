@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { Order, getOrderStatus } from '../../models/order.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-orders',
@@ -84,7 +85,7 @@ export class SearchOrdersComponent implements OnInit {
     return getOrderStatus(order.paidAmount, order.orderAmount);
   }
 
-  isAdmin(): boolean {
+  isAdmin(): Observable<boolean> {
     return this.authService.isAdmin();
   }
 

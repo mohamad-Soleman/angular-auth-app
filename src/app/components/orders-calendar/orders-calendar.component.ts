@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { Order, OrderEvent, OrderType, getOrderStatus } from '../../models/order.model';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-orders-calendar',
@@ -119,7 +120,7 @@ export class OrdersCalendarComponent implements OnInit {
     return order.extendedProps.orderAmount - order.extendedProps.paidAmount;
   }
 
-  isAdmin(): boolean {
+  isAdmin(): Observable<boolean> {
     return this.authService.isAdmin();
   }
 }

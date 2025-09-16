@@ -1,15 +1,51 @@
 
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Observable, Subject, of } from 'rxjs';
+import { takeUntil, catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
+  isAdmin$: Observable<boolean>;
+  isAuthenticated$: Observable<boolean>;
+  private destroy$ = new Subject<void>();
+
   constructor(public auth: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    // Directly use the auth status observable that updates automatically on login/logout
+    this.isAuthenticated$ = this.auth.authStatus$.pipe(
+      takeUntil(this.destroy$),
+      catchError(() => of(false))
+    );
+    
+    this.isAdmin$ = this.auth.authStatus$.pipe(
+      switchMap(isAuth => {
+        if (isAuth) {
+          return this.auth.isAdmin();
+        } else {
+          return of(false);
+        }
+      }),
+      takeUntil(this.destroy$),
+      catchError(() => of(false))
+    );
+
+    // Initial check to set the auth status
+    this.auth.isAuthenticated().subscribe(isAuth => {
+      this.auth.updateAuthStatus(isAuth);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   goHome() {
     if (this.router.url === '/home') {

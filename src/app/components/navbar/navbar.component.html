@@ -1,11 +1,11 @@
 <mat-toolbar color="primary">
-  <button mat-button (click)="goHome()" routerLink="/home" *ngIf="this.auth.hasToken()">דף הבית</button>
-  <button mat-button routerLink="/orders-calendar" *ngIf="this.auth.hasToken()">לוח הזמנות</button>
-  <button mat-button routerLink="/search-orders" *ngIf="this.auth.hasToken()">חיפוש הזמנות</button>
-  <button mat-button routerLink="/admin" *ngIf="auth.isAdmin()">מנהל</button>
-  <button mat-button routerLink="/add-user" *ngIf="auth.isAdmin()">הוסף משתמש</button>
-  <button mat-button routerLink="/add-order" *ngIf="auth.isAdmin()">הוסף הזמנה</button>
+  <button mat-button (click)="goHome()" routerLink="/home" *ngIf="isAuthenticated$ | async">דף הבית</button>
+  <button mat-button routerLink="/orders-calendar" *ngIf="isAuthenticated$ | async">לוח הזמנות</button>
+  <button mat-button routerLink="/search-orders" *ngIf="isAuthenticated$ | async">חיפוש הזמנות</button>
+  <button mat-button routerLink="/admin" *ngIf="isAdmin$ | async">מנהל</button>
+  <button mat-button routerLink="/add-user" *ngIf="isAdmin$ | async">הוסף משתמש</button>
+  <button mat-button routerLink="/add-order" *ngIf="isAdmin$ | async">הוסף הזמנה</button>
   <span class="spacer"></span>
-  <button mat-button routerLink="/login" *ngIf="!this.auth.hasToken()">התחברות</button>
-  <button mat-button (click)="logout()" *ngIf="this.auth.hasToken()">יציאה</button>
+  <button mat-button routerLink="/login" *ngIf="!(isAuthenticated$ | async)">התחברות</button>
+  <button mat-button (click)="logout()" *ngIf="isAuthenticated$ | async">יציאה</button>
 </mat-toolbar>

@@ -20,8 +20,12 @@ export class LoginComponent {
     this.authService.login({ username: this.username, password: this.password })
       .subscribe({
         next: (res: any) => {
-          this.authService.setTokens(res.tokens);
-          this.router.navigate(['/home']);
+          // Tokens are now set as cookies by the server
+          // Auth status is automatically updated via the service
+          // Add a small delay to ensure navbar updates
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 100);
         },
         error: (err) => {
           this.error = err.error.error;
