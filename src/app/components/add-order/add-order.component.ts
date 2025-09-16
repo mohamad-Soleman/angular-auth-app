@@ -14,14 +14,14 @@ export class AddOrderComponent implements OnInit {
     fullName: '',
     phone: '',
     anotherPhone: '',
-    price: 0,
-    minGuests: 0,
-    maxGuests: 0,
+    price: null as any,
+    minGuests: null as any,
+    maxGuests: null as any,
     date: new Date().toISOString(),
     startTime: '',
     endTime: '',
     orderAmount: 0,
-    paidAmount: 0,
+    paidAmount: null as any,
     orderType: '',
     comments: ''
   };
@@ -62,7 +62,11 @@ export class AddOrderComponent implements OnInit {
   }
 
   updateOrderAmount() {
-    this.orderData.orderAmount = this.orderData.price * this.orderData.maxGuests;
+    if (this.orderData.price && this.orderData.maxGuests) {
+      this.orderData.orderAmount = this.orderData.price * this.orderData.maxGuests;
+    } else {
+      this.orderData.orderAmount = 0;
+    }
   }
 
   validateTimes(): boolean {

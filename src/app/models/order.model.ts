@@ -2,10 +2,10 @@ export interface Order {
   id?: string;
   fullName: string;
   phone: string;
-  anotherPhone: string;
+  anotherPhone?: string;  // Optional field
   price?: number;  // Optional for non-admin users
-  minGuests: number;
-  maxGuests: number;
+  minGuests?: number;  // Can be null initially
+  maxGuests?: number;  // Can be null initially
   date: string;  // Expected format: YYYY-MM-DDTHH:mm:ss.sssZ
   startTime: string;
   endTime: string;
@@ -26,8 +26,8 @@ export interface OrderEvent {
     phone: string;
     anotherPhone: string;
     price?: number;     // Optional for non-admin users
-    minGuests: number;
-    maxGuests: number;
+    minGuests?: number;  // Can be null initially
+    maxGuests?: number;  // Can be null initially
     orderType: string;
     orderAmount?: number;  // Optional for non-admin users
     paidAmount?: number;   // Optional for non-admin users
