@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,11 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AddOrderComponent } from './components/add-order/add-order.component';
+import { AddCategoryComponent } from './components/add-category/add-category.component';
+import { AddSubCategoryComponent } from './components/add-sub-category/add-sub-category.component';
 import { OrdersCalendarComponent } from './components/orders-calendar/orders-calendar.component';
 import { SearchOrdersComponent } from './components/search-orders/search-orders.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,12 +48,15 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     NavbarComponent,
     AddOrderComponent,
     OrdersCalendarComponent,
-    SearchOrdersComponent
+    SearchOrdersComponent,
+    AddCategoryComponent,
+    AddSubCategoryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MatInputModule,
@@ -65,6 +72,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     MatNativeDateModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatListModule,
+    MatTooltipModule,
     FullCalendarModule
   ],
   providers: [

@@ -1,0 +1,66 @@
+<div class="add-category-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="page-toolbar">
+      <span>הוספת קטגוריה</span>
+    </mat-toolbar>
+
+    <!-- Add Category Form -->
+    <div class="category-form">
+      <form #categoryForm="ngForm" (ngSubmit)="addCategory()" class="category-form-container">
+        <mat-form-field appearance="outline" class="category-field">
+          <mat-label>שם קטגוריה</mat-label>
+          <input matInput [(ngModel)]="categoryName" name="categoryName" required>
+          <mat-error *ngIf="categoryForm.controls['categoryName']?.hasError('required')">שם קטגוריה הוא שדה חובה</mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!categoryForm.valid || loading">
+            <mat-icon>add</mat-icon>
+            הוסף
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Categories List -->
+    <div class="categories-section">
+      <mat-toolbar color="accent" class="list-toolbar">
+        <span>רשימת קטגוריות</span>
+        <span class="spacer"></span>
+        <span class="category-count">{{categories.length}} קטגוריות</span>
+      </mat-toolbar>
+
+      <mat-list class="categories-list" *ngIf="!loading && !error && categories.length > 0">
+        <mat-list-item *ngFor="let category of categories" class="category-item">
+          <mat-icon matListItemIcon>category</mat-icon>
+          <div matListItemTitle class="category-name">{{category.name}}</div>
+        </mat-list-item>
+      </mat-list>
+
+      <!-- Loading indicator -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner></mat-spinner>
+        <p>טוען קטגוריות...</p>
+      </div>
+
+      <!-- Error message -->
+      <div *ngIf="error && !loading" class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ error }}</p>
+      </div>
+
+      <!-- Success message -->
+      <div *ngIf="message && !loading" class="success-container">
+        <mat-icon color="primary">check_circle</mat-icon>
+        <p>{{ message }}</p>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!loading && !error && categories.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">category</mat-icon>
+        <h3>אין קטגוריות</h3>
+        <p>הוסף את הקטגוריה הראשונה שלך</p>
+      </div>
+    </div>
+  </mat-card>
+</div>

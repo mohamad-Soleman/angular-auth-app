@@ -3,8 +3,6 @@
   <button mat-button routerLink="/orders-calendar" *ngIf="isAuthenticated$ | async">לוח הזמנות</button>
   <button mat-button routerLink="/search-orders" *ngIf="isAuthenticated$ | async">חיפוש הזמנות</button>
   <button mat-button routerLink="/admin" *ngIf="isAdmin$ | async">מנהל</button>
-  <button mat-button routerLink="/add-user" *ngIf="isAdmin$ | async">הוסף משתמש</button>
-  <button mat-button routerLink="/add-order" *ngIf="isAdmin$ | async">הוסף הזמנה</button>
   <span class="spacer"></span>
   <button mat-button routerLink="/login" *ngIf="!(isAuthenticated$ | async)">התחברות</button>
   <button mat-button (click)="logout()" *ngIf="isAuthenticated$ | async">יציאה</button>

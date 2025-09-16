@@ -1,0 +1,88 @@
+<div class="sub-category-container">
+  <mat-toolbar class="sub-category-toolbar">
+    <mat-icon>category</mat-icon>
+    <span>ניהול תת-קטגוריות</span>
+  </mat-toolbar>
+
+  <mat-card class="sub-category-form-card">
+    <mat-card-header>
+      <mat-card-title>הוספת תת-קטגוריה חדשה</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="subCategoryForm" (ngSubmit)="onSubmit()" class="sub-category-form">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>בחר קטגוריית אב</mat-label>
+          <mat-select formControlName="parentCategoryId" required>
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="subCategoryForm.get('parentCategoryId')?.hasError('required')">
+            יש לבחור קטגוריית אב
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>שם התת-קטגוריה</mat-label>
+          <input matInput formControlName="name" placeholder="הכנס שם תת-קטגוריה" required>
+          <mat-error *ngIf="subCategoryForm.get('name')?.hasError('required')">
+            שם התת-קטגוריה נדרש
+          </mat-error>
+          <mat-error *ngIf="subCategoryForm.get('name')?.hasError('minlength')">
+            שם התת-קטגוריה חייב להכיל לפחות תו אחד
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="subCategoryForm.invalid || isLoading">
+            <mat-icon>add</mat-icon>
+            הוסף תת-קטגוריה
+          </button>
+          
+          <button mat-button type="button" (click)="resetForm()">
+            <mat-icon>refresh</mat-icon>
+            נקה טופס
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="message" class="message" [ngClass]="messageType">
+        <mat-icon>{{ messageType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+        {{ message }}
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="sub-categories-list-card">
+    <mat-card-header>
+      <mat-card-title>רשימת תת-קטגוריות</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div *ngIf="subCategories.length === 0" class="no-sub-categories">
+        <mat-icon>info</mat-icon>
+        <p>לא נמצאו תת-קטגוריות</p>
+      </div>
+      
+      <div *ngIf="subCategories.length > 0" class="sub-categories-list">
+        <div *ngFor="let subCategory of subCategories" class="sub-category-item">
+          <div class="sub-category-content">
+            <mat-icon matListItemIcon>subdirectory_arrow_right</mat-icon>
+            <div class="sub-category-text">
+              <p class="sub-category-name">{{ subCategory.name }}</p>
+              <p class="sub-category-parent">קטגוריית אב: {{ subCategory.parent_category_name }}</p>
+            </div>
+          </div>
+          <div class="sub-category-actions">
+            <button mat-icon-button color="warn" (click)="deleteSubCategory(subCategory.id)"
+                    matTooltip="מחק תת-קטגוריה">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
