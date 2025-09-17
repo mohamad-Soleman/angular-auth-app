@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { OrderService } from '../../services/order.service';
 import { Order, OrderType } from '../../models/order.model';
+import { OrderMenuDialogComponent, OrderMenuDialogData } from '../order-menu-dialog/order-menu-dialog.component';
 
 @Component({
   selector: 'app-add-order',
@@ -34,7 +36,8 @@ export class AddOrderComponent implements OnInit {
   constructor(
     private orderService: OrderService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -120,11 +123,18 @@ export class AddOrderComponent implements OnInit {
         this.orderService.addOrder(orderToSend)
           .subscribe((res: any) => {
             this.message = res.message;
+            
+            // Show success dialog for adding order menu
+            if (res.success && res.order_id) {
+              this.showOrderMenuDialog(res.order_id, this.orderData.fullName, this.orderData.orderType);
+            }
+            
             form.resetForm();
           });
       }
     }
   }
+
   onDelete(){
     if (this.isEditMode) {
         const orderToUpdate = {
@@ -141,5 +151,28 @@ export class AddOrderComponent implements OnInit {
         this.router.navigate(['/search-orders']); 
       }
   }
-}
 
+  showOrderMenuDialog(orderId: string, customerName: string, orderType: string): void {
+    const dialogData: OrderMenuDialogData = {
+      orderId: orderId,
+      customerName: customerName,
+      orderType: orderType
+    };
+
+    const dialogRef = this.dialog.open(OrderMenuDialogComponent, {
+      width: '500px',
+      data: dialogData,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        // User wants to add order menu, navigate to order menu page
+        this.router.navigate(['/order-menu', orderId]);
+      } else {
+        // User chose "Later", just navigate to search orders
+        this.router.navigate(['/search-orders']);
+      }
+    });
+  }
+}

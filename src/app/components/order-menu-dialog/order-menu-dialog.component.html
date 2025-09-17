@@ -1,0 +1,40 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title class="dialog-title">
+    <mat-icon class="dialog-icon">restaurant_menu</mat-icon>
+    להוסיף תפריט אוכל?
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="success-message">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <p class="success-text">ההזמנה נוצרה בהצלחה!</p>
+    </div>
+
+    <div class="order-details">
+      <p><strong>לקוח:</strong> {{ data.customerName }}</p>
+      <p><strong>סוג אירוע:</strong> {{ data.orderType }}</p>
+    </div>
+
+    <div class="question-section">
+      <p class="question">האם תרצה להוסיף תפריט אוכל להזמנה זו עכשיו?</p>
+      <p class="subtitle">ניתן להוסיף את התפריט מאוחר יותר מעמוד חיפוש ההזמנות</p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button
+            (click)="onNoClick()"
+            class="cancel-button">
+      <mat-icon>close</mat-icon>
+      מאוחר יותר
+    </button>
+    
+    <button mat-raised-button
+            color="primary"
+            (click)="onYesClick()"
+            class="confirm-button">
+      <mat-icon>restaurant_menu</mat-icon>
+      כן, הוסף תפריט
+    </button>
+  </mat-dialog-actions>
+</div>

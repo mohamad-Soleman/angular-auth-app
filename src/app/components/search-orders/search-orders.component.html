@@ -160,6 +160,28 @@
                 <mat-icon>edit</mat-icon>
                 ערוך הזמנה
               </button>
+              
+              <!-- Order Menu Actions -->
+              <div class="menu-actions">
+                <button mat-raised-button
+                        color="primary"
+                        (click)="navigateToOrderMenu(order.id!)"
+                        class="menu-button"
+                        *ngIf="checkOrderHasMenu(order.id!); else addMenuButton">
+                  <mat-icon>restaurant_menu</mat-icon>
+                  ערוך תפריט
+                </button>
+                
+                <ng-template #addMenuButton>
+                  <button mat-raised-button
+                          color="primary"
+                          (click)="navigateToOrderMenu(order.id!)"
+                          class="menu-button add-menu">
+                    <mat-icon>add</mat-icon>
+                    הוסף תפריט
+                  </button>
+                </ng-template>
+              </div>
             </div>
           
           </div>

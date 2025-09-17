@@ -19,9 +19,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
 import { AddOrderComponent } from './components/add-order/add-order.component';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { AddSubCategoryComponent } from './components/add-sub-category/add-sub-category.component';
+import { OrderMenuComponent } from './components/order-menu/order-menu.component';
+import { OrderMenuDialogComponent } from './components/order-menu-dialog/order-menu-dialog.component';
 import { OrdersCalendarComponent } from './components/orders-calendar/orders-calendar.component';
 import { SearchOrdersComponent } from './components/search-orders/search-orders.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -50,7 +55,9 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     OrdersCalendarComponent,
     SearchOrdersComponent,
     AddCategoryComponent,
-    AddSubCategoryComponent
+    AddSubCategoryComponent,
+    OrderMenuComponent,
+    OrderMenuDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -74,6 +81,9 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     MatProgressSpinnerModule,
     MatListModule,
     MatTooltipModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatChipsModule,
     FullCalendarModule
   ],
   providers: [

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
+import { OrderMenuService } from '../../services/order-menu.service';
 import { Order, getOrderStatus } from '../../models/order.model';
 import { Observable } from 'rxjs';
 
@@ -21,9 +22,13 @@ export class SearchOrdersComponent implements OnInit {
   endDate: Date | null = null;
   hasSearched = false;
 
+  // Cache for order menu status to prevent infinite requests
+  orderMenuCache = new Map<string, boolean>();
+
   constructor(
     private orderService: OrderService,
     private authService: AuthService,
+    private orderMenuService: OrderMenuService,
     private router: Router
   ) {}
 
@@ -71,6 +76,9 @@ export class SearchOrdersComponent implements OnInit {
         this.orders = this.sortOrdersByDate(orders);
         this.searching = false;
         this.loading = false;
+        // Clear cache and preload menu status for all orders
+        this.orderMenuCache.clear();
+        this.preloadOrderMenuStatus();
       },
       error: (err) => {
         this.error = 'שגיאה בחיפוש ההזמנות';
@@ -133,5 +141,28 @@ export class SearchOrdersComponent implements OnInit {
     localStorage.setItem('editingOrder', JSON.stringify(order));
     // Navigate to add-order component for editing
     this.router.navigate(['/add-order'], { queryParams: { edit: 'true' } });
+  }
+
+  navigateToOrderMenu(orderId: string) {
+    this.router.navigate(['/order-menu', orderId]);
+  }
+
+  checkOrderHasMenu(orderId: string): boolean {
+    return this.orderMenuCache.get(orderId) || false;
+  }
+
+  private preloadOrderMenuStatus(): void {
+    this.orders.forEach(order => {
+      if (order.id && !this.orderMenuCache.has(order.id)) {
+        this.orderMenuService.checkOrderMenu(order.id).subscribe({
+          next: (response) => {
+            this.orderMenuCache.set(order.id!, response.success && response.data?.has_menu_items === true);
+          },
+          error: () => {
+            this.orderMenuCache.set(order.id!, false);
+          }
+        });
+      }
+    });
   }
 }
