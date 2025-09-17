@@ -1,0 +1,99 @@
+<div class="sub-category-container">
+  <mat-toolbar class="sub-category-toolbar">
+    <mat-icon>category</mat-icon>
+    <span>ניהול תת-קטגוריות</span>
+  </mat-toolbar>
+
+  <mat-card class="sub-category-form-card">
+    <mat-card-header>
+      <mat-card-title>הוספת תת-קטגוריה חדשה</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="subCategoryForm" (ngSubmit)="onSubmit()" class="sub-category-form">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>בחר קטגוריית אב</mat-label>
+          <mat-select formControlName="parentCategoryId" required>
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="subCategoryForm.get('parentCategoryId')?.hasError('required')">
+            יש לבחור קטגוריית אב
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>שם התת-קטגוריה</mat-label>
+          <input matInput formControlName="name" placeholder="הכנס שם תת-קטגוריה" required>
+          <mat-error *ngIf="subCategoryForm.get('name')?.hasError('required')">
+            שם התת-קטגוריה נדרש
+          </mat-error>
+          <mat-error *ngIf="subCategoryForm.get('name')?.hasError('minlength')">
+            שם התת-קטגוריה חייב להכיל לפחות תו אחד
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="subCategoryForm.invalid || isLoading">
+            <mat-icon>add</mat-icon>
+            הוסף תת-קטגוריה
+          </button>
+          
+          <button mat-button type="button" (click)="resetForm()">
+            <mat-icon>refresh</mat-icon>
+            נקה טופס
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="message" class="message" [ngClass]="messageType">
+        <mat-icon>{{ messageType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+        {{ message }}
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="sub-categories-list-card">
+    <mat-card-header>
+      <mat-card-title>רשימת תת-קטגוריות</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div *ngIf="groupedSubCategories.length === 0" class="no-sub-categories">
+        <mat-icon>info</mat-icon>
+        <p>לא נמצאו תת-קטגוריות</p>
+      </div>
+      
+      <mat-accordion *ngIf="groupedSubCategories.length > 0" class="sub-categories-accordion">
+        <mat-expansion-panel *ngFor="let categoryGroup of groupedSubCategories" class="category-panel">
+          <mat-expansion-panel-header class="category-header">
+            <mat-panel-title class="category-title">
+              <mat-icon>category</mat-icon>
+              <span>{{ categoryGroup.categoryName }}</span>
+            </mat-panel-title>
+            <mat-panel-description class="category-description">
+              {{ categoryGroup.subCategories.length }} תת-קטגוריות
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          
+          <div class="sub-categories-content">
+            <div *ngFor="let subCategory of categoryGroup.subCategories" class="sub-category-item">
+              <div class="sub-category-info">
+                <mat-icon class="sub-category-icon">subdirectory_arrow_right</mat-icon>
+                <span class="sub-category-name">{{ subCategory.name }}</span>
+              </div>
+              <div class="sub-category-actions">
+                <button mat-icon-button color="warn" (click)="deleteSubCategory(subCategory.id)"
+                        matTooltip="מחק תת-קטגוריה">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
+</div>

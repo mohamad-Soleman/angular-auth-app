@@ -12,8 +12,7 @@ export class AuthGuard implements CanActivate {
     return this.auth.isAuthenticated().pipe(
       map(isAuth => {
         if (!isAuth) {
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
+          // Cookies are handled by the server, just redirect
           this.router.navigate(['/login']);
           return false;
         }

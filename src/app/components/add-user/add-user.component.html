@@ -12,6 +12,8 @@
             matInput
             [(ngModel)]="username"
             name="username"
+            type="text"
+            autocomplete="username"
             required
             minlength="4"
             #usernameCtrl="ngModel"
@@ -30,6 +32,7 @@
             matInput
             [(ngModel)]="email"
             name="email"
+            autocomplete="email"
             required
             email
             #emailCtrl="ngModel"
@@ -49,6 +52,7 @@
             [type]="hidePassword ? 'password' : 'text'"
             [(ngModel)]="password"
             name="password"
+            autocomplete="new-password"
             required
             minlength="6"
             #passwordCtrl="ngModel"

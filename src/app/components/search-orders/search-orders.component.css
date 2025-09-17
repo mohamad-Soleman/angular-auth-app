@@ -313,10 +313,17 @@
 
 .admin-actions {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 12px;
   padding: 16px 0 8px 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: 16px;
+}
+
+.menu-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .edit-button {
@@ -336,6 +343,34 @@
 .edit-button mat-icon {
   margin-left: 8px;
   font-size: 18px;
+}
+
+.menu-button {
+  min-width: 140px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+  transform: translateY(-1px);
+}
+
+.menu-button mat-icon {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+.menu-button.add-menu {
+  /* Remove the green background override to keep primary color */
+  /* background-color: #4caf50; */
+  /* color: white; */
+}
+
+.menu-button.add-menu:hover {
+  /* background-color: #45a049; */
 }
 
 .no-orders {
@@ -366,6 +401,25 @@
 }
 
 /* Responsive design */
+/* Tablet view */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .search-form-container {
+    max-width: 700px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .date-fields {
+    justify-content: center;
+  }
+
+  .date-field {
+    min-width: 180px;
+    max-width: 220px;
+  }
+}
+
+/* Mobile view */
 @media (max-width: 768px) {
   .search-orders-container {
     padding: 12px;
@@ -380,20 +434,28 @@
   .search-form-container {
     flex-direction: column;
     gap: 16px;
+    align-items: center;
+    justify-content: center;
   }
 
   .date-fields {
     flex-direction: column;
     gap: 16px;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
   }
 
   .date-field {
     max-width: 100%;
     min-width: 100%;
+    width: 100%;
   }
 
   .search-actions {
     margin-top: 8px;
+    width: 100%;
+    max-width: 400px;
   }
 
   .search-actions button {
@@ -485,6 +547,22 @@
 
   .order-panel {
     margin-bottom: 8px;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .menu-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .edit-button,
+  .menu-button {
+    width: 100%;
+    min-width: auto;
   }
 }
 

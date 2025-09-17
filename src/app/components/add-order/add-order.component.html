@@ -23,14 +23,13 @@
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>טלפון נוסף</mat-label>
-          <input matInput [(ngModel)]="orderData.anotherPhone" name="anotherPhone" required pattern="[0-9]{9,10}">
-          <mat-error *ngIf="orderForm.controls['anotherPhone']?.hasError('required')">טלפון נוסף הוא שדה חובה</mat-error>
+          <input matInput [(ngModel)]="orderData.anotherPhone" name="anotherPhone" pattern="[0-9]{9,10}">
           <mat-error *ngIf="orderForm.controls['anotherPhone']?.hasError('pattern')">מספר טלפון נוסף לא תקין</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>מחיר</mat-label>
-          <input matInput type="number" [(ngModel)]="orderData.price" name="price" min="0" required>
+          <input matInput type="number" [(ngModel)]="orderData.price" name="price" min="1" required (ngModelChange)="updateOrderAmount()">
            <mat-error *ngIf="orderForm.controls['price']?.hasError('required')">מחיר הזמנה הוא שדה חובה</mat-error>
            <mat-error *ngIf="orderForm.controls['price']?.hasError('min')">מחיר הזמנה חייב להיות חיובי</mat-error>
         </mat-form-field>
@@ -46,7 +45,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>מספר אורחים מקסימלי</mat-label>
-          <input matInput type="number" [(ngModel)]="orderData.maxGuests" name="maxGuests" min="1" required>
+          <input matInput type="number" [(ngModel)]="orderData.maxGuests" name="maxGuests" min="1" required (ngModelChange)="updateOrderAmount()">
           <mat-error *ngIf="orderForm.controls['maxGuests']?.hasError('required')">מספר אורחים מקסימלי הוא שדה חובה</mat-error>
           <mat-error *ngIf="orderForm.controls['maxGuests']?.hasError('min')">מספר אורחים מקסימלי חייב להיות לפחות 1</mat-error>
         </mat-form-field>
@@ -56,14 +55,14 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>סכום הזמנה</mat-label>
-          <input matInput type="number" [value]="orderData.price * orderData.maxGuests" name="orderAmount" readonly>
+          <input matInput type="number" [value]="orderData.orderAmount" name="orderAmount" readonly>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>סכום ששולם</mat-label>
           <input matInput type="number" [(ngModel)]="orderData.paidAmount" name="paidAmount" min="0" required>
           <mat-error *ngIf="orderForm.controls['paidAmount']?.hasError('required')">סכום ששולם הוא שדה חובה</mat-error>
-          <mat-error *ngIf="orderForm.controls['paidAmount']?.hasError('min')">סכום ששולם חייב להיות חיובי</mat-error>
+          <mat-error *ngIf="orderForm.controls['paidAmount']?.hasError('min')">סכום ששולם חייב להיות חיובי או 0</mat-error>
         </mat-form-field>
       </div>
 

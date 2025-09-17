@@ -1,1 +1,83 @@
-<h2>מנהל המערכת</h2>
+<div class="admin-panel-container">
+  <mat-card>
+    <mat-toolbar color="primary" class="page-toolbar">
+      <span>מנהל המערכת</span>
+    </mat-toolbar>
+
+    <div class="admin-content">
+      <div class="admin-cards-grid">
+        <!-- Add User Card -->
+        <mat-card class="admin-card" (click)="navigateTo('/add-user')">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="card-icon">person_add</mat-icon>
+            <mat-card-title>הוספת משתמש</mat-card-title>
+            <mat-card-subtitle>הוסף משתמש חדש למערכת</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>ניהול משתמשים במערכת - הוספת משתמשים חדשים עם הרשאות מתאימות</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary">
+              <mat-icon>arrow_forward</mat-icon>
+              כניסה
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <!-- Add Order Card -->
+        <mat-card class="admin-card" (click)="navigateTo('/add-order')">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="card-icon">event_note</mat-icon>
+            <mat-card-title>הוספת הזמנה</mat-card-title>
+            <mat-card-subtitle>הוסף הזמנה חדשה למערכת</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>ניהול הזמנות - הוספת הזמנות חדשות לאירועים</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary">
+              <mat-icon>arrow_forward</mat-icon>
+              כניסה
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <!-- Add Category Card -->
+        <mat-card class="admin-card" (click)="navigateTo('/add-category')">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="card-icon">category</mat-icon>
+            <mat-card-title>הוספת קטגוריה</mat-card-title>
+            <mat-card-subtitle>הוסף קטגוריות חדשות לאירועים</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>ניהול קטגוריות - הוספה ועריכה של סוגי אירועים</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary">
+              <mat-icon>arrow_forward</mat-icon>
+              כניסה
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <!-- Add Sub-Category Card -->
+        <mat-card class="admin-card" (click)="navigateTo('/add-sub-category')">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="card-icon">subdirectory_arrow_right</mat-icon>
+            <mat-card-title>הוספת תת-קטגוריה</mat-card-title>
+            <mat-card-subtitle>הוסף תת-קטגוריות לקטגוריות קיימות</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>ניהול תת-קטגוריות - הוספה ועריכה של תת-סוגי אירועים</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary">
+              <mat-icon>arrow_forward</mat-icon>
+              כניסה
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card>
+</div>

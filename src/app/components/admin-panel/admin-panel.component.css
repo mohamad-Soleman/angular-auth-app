@@ -1,1 +1,150 @@
-h2 { color: darkblue; text-align: center; }
+.admin-panel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  direction: rtl;
+}
+
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  margin-bottom: 0;
+}
+
+.admin-content {
+  padding: 24px;
+}
+
+.admin-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  justify-content: center;
+}
+
+.admin-card {
+  cursor: pointer;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.admin-card mat-card-header {
+  padding-bottom: 8px;
+}
+
+.card-icon {
+  background-color: #3f51b5 !important;
+  color: white !important;
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+::ng-deep .admin-card .mat-card-header-text {
+  margin: 0 16px 0 0;
+}
+
+::ng-deep .admin-card .mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+::ng-deep .admin-card .mat-card-subtitle {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+::ng-deep .admin-card .mat-card-content {
+  padding: 16px 16px 0 16px;
+}
+
+.admin-card mat-card-content p {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+::ng-deep .admin-card .mat-card-actions {
+  padding: 16px;
+  justify-content: flex-end;
+}
+
+.admin-card mat-card-actions button {
+  border-radius: 20px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.admin-card mat-card-actions button mat-icon {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admin-panel-container {
+    padding: 12px;
+    max-width: 100%;
+  }
+
+  .admin-content {
+    padding: 16px;
+  }
+
+  .admin-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .admin-card {
+    border-radius: 12px;
+  }
+
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  ::ng-deep .admin-card .mat-card-title {
+    font-size: 16px;
+  }
+
+  ::ng-deep .admin-card .mat-card-subtitle {
+    font-size: 13px;
+  }
+
+  .admin-card mat-card-content p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-panel-container {
+    padding: 8px;
+  }
+
+  .admin-content {
+    padding: 12px;
+  }
+
+  .admin-cards-grid {
+    gap: 12px;
+  }
+
+  ::ng-deep .admin-card .mat-card-header-text {
+    margin: 0 12px 0 0;
+  }
+}

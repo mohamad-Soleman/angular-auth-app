@@ -3,19 +3,61 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private authStatusSubject = new BehaviorSubject<boolean>(false);
+  public authStatus$ = this.authStatusSubject.asObservable();
+
   constructor(private http: HttpClient, private router: Router) {}
 
   login(data: any) {
-    return this.http.post(`${environment.apiBaseUrl}/auth/login`, data);
+    return this.http.post(`${environment.apiBaseUrl}/auth/login`, data, { withCredentials: true }).pipe(
+      switchMap((response: any) => {
+        // After successful login, get user details for client-side validation
+        return this.http.get(`${environment.apiBaseUrl}/auth/whoami`, { withCredentials: true }).pipe(
+          tap((whoamiResponse: any) => {
+            // Store user data directly in sessionStorage for client-side checks
+            if (whoamiResponse && whoamiResponse.user_details) {
+              const userData = whoamiResponse.user_details;
+              this.setUserData(userData);
+            }
+            
+            // Emit authentication status change after successful login
+            this.authStatusSubject.next(true);
+          }),
+          map(() => response), // Return the original login response
+          catchError((error) => {
+            // If whoami fails, we're still logged in via cookies, just can't do client-side validation
+            console.warn('Could not retrieve user details for client-side validation');
+            this.authStatusSubject.next(true);
+            return of(response); // Still return success
+          })
+        );
+      })
+    );
+  }
+
+  // Store user data for client-side checks
+  private setUserData(userData: any) {
+    sessionStorage.setItem('user_data', JSON.stringify(userData));
+  }
+
+  // Get stored user data
+  private getUserData(): any {
+    const userData = sessionStorage.getItem('user_data');
+    return userData ? JSON.parse(userData) : null;
+  }
+
+  // Clear user data
+  private clearUserData() {
+    sessionStorage.removeItem('user_data');
   }
 
   logout() {
-    this.http.get(`${environment.apiBaseUrl}/auth/logout`, {})
+    this.http.get(`${environment.apiBaseUrl}/auth/logout`, { withCredentials: true })
       .subscribe({
         next: () => {
           this.clearTokensAndRedirect();
@@ -27,8 +69,9 @@ export class AuthService {
   }
 
   private clearTokensAndRedirect() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    // Cookies are cleared by the server, emit auth status change and redirect
+    this.clearUserData();
+    this.authStatusSubject.next(false);
     this.router.navigate(['/login']);
   }
 
@@ -36,34 +79,42 @@ export class AuthService {
     this.clearTokensAndRedirect();
   }
 
+  // Public method to update auth status
+  updateAuthStatus(status: boolean) {
+    this.authStatusSubject.next(status);
+  }
+
+  // These methods are no longer needed for cookie-based auth but kept for compatibility
   setTokens(tokens: any) {
-    localStorage.setItem('access_token', tokens.access);
-    localStorage.setItem('refresh_token', tokens.refresh);
+    // Tokens are now set as cookies by the server
+    // This method is kept for compatibility but does nothing
   }
 
   getToken(): string | null {
-    return localStorage.getItem('access_token');
+    // With httpOnly cookies, we can't directly access the token from JavaScript
+    // Authentication status is verified through API calls
+    return null;
   }
 
-  isAdmin(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
-    
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.is_admin === true;
-    } catch (error) {
-      console.error('Error parsing JWT token:', error);
-      this.logoutLocally();
-      return false;
-    }
+  // Method to get stored token for header fallback (not needed anymore)
+  getStoredToken(): string | null {
+    return null; // We don't store tokens anymore, just use user data
+  }
+
+  isAdmin(): Observable<boolean> {
+    const userData = this.getUserData();
+    return of(userData?.is_admin === true);
   }
 
   hasToken(): boolean {
-    return !!this.getToken();
+    // With httpOnly cookies, we can't check this directly
+    // We'll rely on API calls to verify authentication
+    return true; // Assume we might have a token, verification happens in isAuthenticated()
   }
 
   isValidJWT(token: string): boolean {
+    // This method is no longer needed with cookie-based auth
+    // but kept for compatibility
     try {
       const parts = token.split('.');
       if (parts.length !== 3) return false;
@@ -74,86 +125,48 @@ export class AuthService {
     }
   }
 
-  isCurrentlyAuthenticated(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
-    
-    if (!this.isValidJWT(token)) {
-      this.logoutLocally();
-      return false;
-    }
-    
-    return !this.isTokenExpired();
+  isCurrentlyAuthenticated(): Observable<boolean> {
+    // Simplified to just call the API to verify
+    return this.isAuthenticated();
   }
 
-  isTokenExpired(): boolean {
-    const token = this.getToken();
-    if (!token) return true;
+  isTokenExpired(token?: string): boolean {
+    const tokenToCheck = token || this.getStoredToken();
+    if (!tokenToCheck) return true;
     
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(tokenToCheck.split('.')[1]));
       const currentTime = Math.floor(Date.now() / 1000);
       return payload.exp < currentTime;
     } catch (error) {
       console.error('Error checking token expiration:', error);
-      this.logoutLocally();
       return true;
     }
   }
 
   isAuthenticated(): Observable<boolean> {
-    const token = this.getToken();
-    if (!token) {
+    // Check if we have user data stored (indicates successful authentication)
+    const userData = this.getUserData();
+    
+    if (!userData) {
+      // No user data available, not authenticated
       return of(false);
     }
-    
-    // Check if token is valid JWT format
-    if (!this.isValidJWT(token)) {
-      this.logoutLocally();
-      return of(false);
-    }
-    
-    // If token is expired, try to refresh it
-    if (this.isTokenExpired()) {
-      return this.refreshToken().pipe(
-        switchMap(newToken => {
-          localStorage.setItem('access_token', newToken);
-          return this.http.get(`${environment.apiBaseUrl}/auth/verify`, { observe: 'response' }).pipe(
-            map(response => response.status === 200),
-            catchError(() => of(false))
-          );
-        }),
-        catchError(() => {
-          // Refresh failed, user needs to login again
-          this.logoutLocally();
-          return of(false);
-        })
-      );
-    }
-    
-    return this.http.get(`${environment.apiBaseUrl}/auth/verify`, { observe: 'response' }).pipe(
-      map(response => response.status === 200),
-      catchError(() => of(false))
-    );
+
+    // We have user data, so we're authenticated
+    return of(true);
   }
 
-  refreshToken(): Observable<string> {
-    const refreshToken = localStorage.getItem('refresh_token');
-
-    if (!refreshToken) {
-      this.logoutLocally();
-      throw new Error('No refresh token found');
-    }
-
-    return this.http.get<any>(`${environment.apiBaseUrl}/auth/refresh`, {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`
-      }
+  refreshToken(): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}/auth/refresh`, {
+      withCredentials: true
     }).pipe(
-      map(response => response.access_token),
       catchError(error => {
         console.error('Token refresh failed:', error);
-        this.logoutLocally();
+        // If refresh fails with 401, it means there are no valid cookies
+        if (error.status === 401) {
+          this.logoutLocally();
+        }
         throw error;
       })
     );

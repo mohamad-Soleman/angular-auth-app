@@ -86,4 +86,30 @@ export class OrderService {
         })))
       );
   }
+
+  getOrderById(orderId: string): Observable<{ success: boolean; message: string; data?: Order }> {
+    return this.http.get<{ success: boolean; message: string; data?: OrderResponse }>(`${environment.apiBaseUrl}/orders/${orderId}`, {
+      withCredentials: true
+    }).pipe(
+      map(response => ({
+        ...response,
+        data: response.data ? {
+          id: response.data.id,
+          fullName: response.data.full_name,
+          phone: response.data.phone,
+          anotherPhone: response.data.another_phone,
+          price: response.data.price,
+          minGuests: response.data.min_guests,
+          maxGuests: response.data.max_guests,
+          date: response.data.date,
+          startTime: response.data.start_time,
+          endTime: response.data.end_time,
+          orderAmount: response.data.order_amount,
+          paidAmount: response.data.paid_amount,
+          orderType: response.data.order_type,
+          comments: response.data.comments
+        } : undefined
+      }))
+    );
+  }
 }

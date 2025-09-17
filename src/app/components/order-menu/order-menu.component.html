@@ -1,0 +1,165 @@
+<div class="container">
+  <div class="header-section">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>ניהול תפריט הזמנה</h1>
+  </div>
+
+  <!-- Order Details Card -->
+  <mat-card class="order-details-card" *ngIf="order">
+    <mat-card-header>
+      <mat-card-title>פרטי ההזמנה</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="order-info">
+        <p><strong>שם הלקוח:</strong> {{ order.fullName }}</p>
+        <p><strong>מספר טלפון:</strong> {{ order.phone }}</p>
+        <p><strong>סוג האירוע:</strong> {{ order.orderType }}</p>
+        <p><strong>תאריך האירוע:</strong> {{ order.date | date:'dd/MM/yyyy' }}</p>
+        <p><strong>שעת התחלה:</strong> {{ order.startTime }}</p>
+        <p><strong>שעת סיום:</strong> {{ order.endTime }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+    <p>טוען נתונים...</p>
+  </div>
+
+  <!-- Order Menu Form -->
+  <mat-card class="menu-form-card" *ngIf="!isLoading">
+    <mat-card-header>
+      <mat-card-title>תפריט האוכל</mat-card-title>
+      <mat-card-subtitle>בחר מנות מכל קטגוריה (חובה)</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Category-based Menu Selection -->
+        <div class="categories-container">
+          <mat-accordion *ngFor="let category of categories; let categoryIndex = index" class="category-accordion">
+            <mat-expansion-panel
+              [expanded]="categoryIndex === 0"
+              class="category-panel"
+              [class.category-incomplete]="!isCategoryComplete(category.id)">
+              
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div class="category-header">
+                    <mat-icon class="category-icon">restaurant</mat-icon>
+                    <span class="category-name">{{ category.name }}</span>
+                    <mat-icon
+                      class="status-icon"
+                      [class.complete]="isCategoryComplete(category.id)"
+                      [class.incomplete]="!isCategoryComplete(category.id)">
+                      {{ isCategoryComplete(category.id) ? 'check_circle' : 'error' }}
+                    </mat-icon>
+                  </div>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span class="selection-count">
+                    {{ getSelectedCountForCategory(category.id) }} / {{ category.sub_categories.length }} נבחרו
+                  </span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="subcategories-compact-grid">
+                <div
+                  *ngFor="let subCategory of category.sub_categories"
+                  class="subcategory-compact-item"
+                  [class.selected]="isSubCategorySelected(subCategory.id)"
+                  (click)="toggleSubCategory(subCategory.id, category.id, !isSubCategorySelected(subCategory.id))">
+                  
+                  <mat-checkbox
+                    [checked]="isSubCategorySelected(subCategory.id)"
+                    (change)="toggleSubCategory(subCategory.id, category.id, $event.checked)"
+                    (click)="$event.stopPropagation()"
+                    class="subcategory-compact-checkbox">
+                  </mat-checkbox>
+                  
+                  <span class="subcategory-compact-name">{{ subCategory.name }}</span>
+                </div>
+              </div>
+
+              <!-- Category Validation Message -->
+              <div *ngIf="!isCategoryComplete(category.id)" class="category-warning">
+                <mat-icon color="warn">warning</mat-icon>
+                <span>יש לבחור לפחות מנה אחת מקטגוריה זו</span>
+              </div>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <!-- Overall Menu Summary -->
+        <mat-card class="menu-summary" *ngIf="getSelectedItemsCount() > 0">
+          <mat-card-header>
+            <mat-card-title>סיכום התפריט</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="summary-stats">
+              <div class="stat-item">
+                <mat-icon>restaurant_menu</mat-icon>
+                <span>{{ getSelectedItemsCount() }} מנות נבחרו</span>
+              </div>
+              <div class="stat-item">
+                <mat-icon>category</mat-icon>
+                <span>{{ getCompleteCategoriesCount() }} / {{ categories.length }} קטגוריות הושלמו</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- General Menu Notes -->
+        <mat-card class="menu-notes-card" *ngIf="getSelectedItemsCount() > 0">
+          <mat-card-header>
+            <mat-card-title>הערות כלליות לתפריט</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="general-notes-field">
+              <mat-label>הערות מיוחדות לתפריט (אופציונלי)</mat-label>
+              <textarea matInput
+                        [(ngModel)]="generalNotes"
+                        rows="4"
+                        placeholder="הערות כלליות, דרישות מיוחדות, אלרגיות..."></textarea>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="!isMenuComplete() || isSubmitting"
+                  class="save-button">
+            <mat-icon *ngIf="!isSubmitting">save</mat-icon>
+            <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
+            {{ isSubmitting ? 'שומר...' : 'שמור תפריט' }}
+          </button>
+
+          <button mat-button
+                  type="button"
+                  (click)="goBack()"
+                  [disabled]="isSubmitting"
+                  class="cancel-button">
+            ביטול
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && categories.length === 0">
+    <mat-icon class="empty-icon">restaurant_menu</mat-icon>
+    <h3>אין קטגוריות זמינות</h3>
+    <p>אנא הוסף קטגוריות ומנות קודם מלוח הניהול</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      חזור לחיפוש
+    </button>
+  </div>
+</div>
