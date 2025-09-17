@@ -1,5 +1,5 @@
 
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://127.0.0.1:5000'
+  apiBaseUrl: 'https://flask-app-8fw1.onrender.com'
 };
