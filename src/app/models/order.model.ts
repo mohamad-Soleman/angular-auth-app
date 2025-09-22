@@ -50,11 +50,11 @@ export enum OrderType {
 
 // Extras options enumeration
 export enum ExtrasOptions {
-  DECORATION = 'עיצוב וקישוט',
-  PHOTOGRAPHY = 'צילום',
-  MUSIC = 'מוזיקה',
-  TRANSPORTATION = 'הסעות',
-  SECURITY = 'אבטחה'
+  ZINA = 'زينة',
+  BUFFET = 'بوفيه',
+  BAND = 'فرقة',
+  DJ = 'DJ',
+  SELFIE = 'סלפי'
 }
 
 // Order status helper
