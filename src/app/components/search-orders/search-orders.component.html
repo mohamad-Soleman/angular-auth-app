@@ -156,13 +156,12 @@
             </div>
             <!-- Admin Actions -->
             <div *ngIf="(isAdmin() | async)" class="admin-actions">
-              <button mat-raised-button color="accent" (click)="editOrder(order)" class="edit-button">
-                <mat-icon>edit</mat-icon>
-                ערוך הזמנה
-              </button>
-              
-              <!-- Order Menu Actions -->
-              <div class="menu-actions">
+              <div class="admin-buttons">
+                <button mat-raised-button color="accent" (click)="editOrder(order)" class="edit-button">
+                  <mat-icon>edit</mat-icon>
+                  ערוך הזמנה
+                </button>
+                
                 <button mat-raised-button
                         color="primary"
                         (click)="navigateToOrderMenu(order.id!)"
