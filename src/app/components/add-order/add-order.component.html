@@ -35,17 +35,6 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>מחיר</mat-label>
-          <input matInput type="number" [(ngModel)]="orderData.price" name="price" min="1" required (ngModelChange)="updateOrderAmount()">
-           <mat-error *ngIf="orderForm.controls['price']?.hasError('required')">מחיר הזמנה הוא שדה חובה</mat-error>
-           <mat-error *ngIf="orderForm.controls['price']?.hasError('min')">מחיר הזמנה חייב להיות חיובי</mat-error>
-        </mat-form-field>
-
-        <div class="form-field"></div>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
           <mat-label>מספר אורחים מינימלי</mat-label>
           <input matInput type="number" [(ngModel)]="orderData.minGuests" name="minGuests" min="1" required>
           <mat-error *ngIf="orderForm.controls['minGuests']?.hasError('required')">מספר אורחים מינימלי הוא שדה חובה</mat-error>
@@ -57,6 +46,13 @@
           <input matInput type="number" [(ngModel)]="orderData.maxGuests" name="maxGuests" min="1" required (ngModelChange)="updateOrderAmount()">
           <mat-error *ngIf="orderForm.controls['maxGuests']?.hasError('required')">מספר אורחים מקסימלי הוא שדה חובה</mat-error>
           <mat-error *ngIf="orderForm.controls['maxGuests']?.hasError('min')">מספר אורחים מקסימלי חייב להיות לפחות 1</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>מחיר</mat-label>
+          <input matInput type="number" [(ngModel)]="orderData.price" name="price" min="1" required (ngModelChange)="updateOrderAmount()">
+           <mat-error *ngIf="orderForm.controls['price']?.hasError('required')">מחיר הזמנה הוא שדה חובה</mat-error>
+           <mat-error *ngIf="orderForm.controls['price']?.hasError('min')">מחיר הזמנה חייב להיות חיובי</mat-error>
         </mat-form-field>
       </div>
 
@@ -119,8 +115,7 @@
         <div class="extras-grid">
           <div *ngFor="let extra of extrasOptions" 
                class="extra-item" 
-               [class.selected]="isExtraSelected(extra)"
-               (click)="toggleExtra(extra)">
+               [class.selected]="isExtraSelected(extra)">
             <mat-checkbox [checked]="isExtraSelected(extra)" (change)="toggleExtra(extra)">
               {{extra}}
             </mat-checkbox>

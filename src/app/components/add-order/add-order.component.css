@@ -116,11 +116,24 @@
 .extra-item mat-checkbox {
   margin: 0;
   width: 100%;
+  pointer-events: auto;
 }
 
 .extra-item mat-checkbox ::ng-deep .mat-checkbox-label {
   font-size: 14px;
   color: #333;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.extra-item mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.extra-item mat-checkbox ::ng-deep .mat-checkbox-frame {
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 /* Responsive adjustments */
