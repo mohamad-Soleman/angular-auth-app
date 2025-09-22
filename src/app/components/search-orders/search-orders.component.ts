@@ -36,20 +36,6 @@ export class SearchOrdersComponent implements OnInit {
     // Don't load orders automatically - wait for search
   }
 
-  loadOrders() {
-    this.loading = true;
-    this.orderService.getAllOrders().subscribe({
-      next: (orders) => {
-        this.orders = this.sortOrdersByDate(orders);
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'שגיאה בטעינת ההזמנות';
-        this.loading = false;
-        console.error('Error loading orders:', err);
-      }
-    });
-  }
 
   searchOrders() {
     if (!this.startDate || !this.endDate) {
@@ -84,7 +70,6 @@ export class SearchOrdersComponent implements OnInit {
         this.error = 'שגיאה בחיפוש ההזמנות';
         this.searching = false;
         this.loading = false;
-        console.error('Error searching orders:', err);
       }
     });
   }

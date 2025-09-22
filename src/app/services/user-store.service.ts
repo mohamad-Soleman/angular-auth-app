@@ -38,9 +38,6 @@ export class UserStoreService {
     return this.isAdmin$;
   }
 
-  isAdminValue(): boolean {
-    return this.isAdminSubject.value;
-  }
 
   clearUserData(): void {
     this.userDataSubject.next(null);

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { UserStoreService, UserData } from './user-store.service';
 
@@ -36,7 +36,6 @@ export class AuthService {
           map(() => response), // Return the original login response
           catchError((error) => {
             // If whoami fails, we're still logged in via cookies, just can't do client-side validation
-            console.warn('Could not retrieve user details for client-side validation');
             this.authStatusSubject.next(true);
             return of(response); // Still return success
           })
@@ -83,64 +82,11 @@ export class AuthService {
     this.authStatusSubject.next(status);
   }
 
-  // These methods are no longer needed for cookie-based auth but kept for compatibility
-  setTokens(tokens: any) {
-    // Tokens are now set as cookies by the server
-    // This method is kept for compatibility but does nothing
-  }
-
-  getToken(): string | null {
-    // With httpOnly cookies, we can't directly access the token from JavaScript
-    // Authentication status is verified through API calls
-    return null;
-  }
-
-  // Method to get stored token for header fallback (not needed anymore)
-  getStoredToken(): string | null {
-    return null; // We don't store tokens anymore, just use user data
-  }
 
   isAdmin(): Observable<boolean> {
     return this.userStore.isAdmin();
   }
 
-  hasToken(): boolean {
-    // With httpOnly cookies, we can't check this directly
-    // We'll rely on API calls to verify authentication
-    return true; // Assume we might have a token, verification happens in isAuthenticated()
-  }
-
-  isValidJWT(token: string): boolean {
-    // This method is no longer needed with cookie-based auth
-    // but kept for compatibility
-    try {
-      const parts = token.split('.');
-      if (parts.length !== 3) return false;
-      JSON.parse(atob(parts[1]));
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  isCurrentlyAuthenticated(): Observable<boolean> {
-    // Simplified to just call the API to verify
-    return this.isAuthenticated();
-  }
-
-  isTokenExpired(token?: string): boolean {
-    const tokenToCheck = token || this.getStoredToken();
-    if (!tokenToCheck) return true;
-    
-    try {
-      const payload = JSON.parse(atob(tokenToCheck.split('.')[1]));
-      const currentTime = Math.floor(Date.now() / 1000);
-      return payload.exp < currentTime;
-    } catch (error) {
-      console.error('Error checking token expiration:', error);
-      return true;
-    }
-  }
 
   isAuthenticated(): Observable<boolean> {
     // Check if we have user data stored (indicates successful authentication)
@@ -169,7 +115,6 @@ export class AuthService {
       map(() => true), // If whoami succeeds, we're authenticated
       catchError((error) => {
         // If whoami fails, we're not authenticated
-        console.warn('Could not restore authentication state:', error);
         this.userStore.clearUserData();
         this.authStatusSubject.next(false);
         return of(false);
@@ -182,7 +127,6 @@ export class AuthService {
       withCredentials: true
     }).pipe(
       catchError(error => {
-        console.error('Token refresh failed:', error);
         // If refresh fails with 401, it means there are no valid cookies
         if (error.status === 401) {
           this.logoutLocally();

@@ -40,10 +40,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.auth.initializeAuthState().subscribe({
       next: (isAuth) => {
         // Auth state is already updated by initializeAuthState
-        console.log('Authentication state initialized:', isAuth);
       },
       error: (error) => {
-        console.error('Failed to initialize authentication state:', error);
+        // Authentication state initialization failed
       }
     });
   }

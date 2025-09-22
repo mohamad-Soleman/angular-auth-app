@@ -61,7 +61,6 @@ export class AddSubCategoryComponent implements OnInit, OnDestroy {
         this.categories = response.categories || [];
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.showMessage('שגיאה בטעינת הקטגוריות', 'error');
       }
     });
@@ -107,7 +106,6 @@ export class AddSubCategoryComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error adding sub-category:', error);
           let errorMessage = 'שגיאה בהוספת התת-קטגוריה';
           
           if (error.error?.error) {
@@ -131,7 +129,6 @@ export class AddSubCategoryComponent implements OnInit, OnDestroy {
           this.loadSubCategories(); // Reload the list
         },
         error: (error) => {
-          console.error('Error deleting sub-category:', error);
           this.showMessage('שגיאה במחיקת התת-קטגוריה', 'error');
         }
       });

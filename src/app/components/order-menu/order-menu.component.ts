@@ -59,7 +59,6 @@ export class OrderMenuComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading order:', error);
         this.snackBar.open('Error loading order details', 'Close', { duration: 3000 });
         this.router.navigate(['/search-orders']);
       }
@@ -70,19 +69,15 @@ export class OrderMenuComponent implements OnInit {
     // Load categories with sub-categories
     this.orderMenuService.getCategoriesWithSubCategories().subscribe({
       next: (response) => {
-        console.log('Categories response:', response); // Debug log
         if (response.success) {
           this.categories = response.data || [];
-          console.log('Loaded categories:', this.categories); // Debug log
           this.loadExistingMenu();
         } else {
-          console.log('Failed to load categories:', response.message); // Debug log
           this.snackBar.open('Failed to load menu categories', 'Close', { duration: 3000 });
           this.isLoading = false;
         }
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.snackBar.open('Error loading menu categories', 'Close', { duration: 3000 });
         this.isLoading = false;
       }
@@ -108,7 +103,6 @@ export class OrderMenuComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading existing menu:', error);
         this.isLoading = false;
       }
     });
@@ -207,7 +201,6 @@ export class OrderMenuComponent implements OnInit {
       },
       error: (error) => {
         this.isSubmitting = false;
-        console.error('Error saving order menu:', error);
         this.snackBar.open('שגיאה בשמירת התפריט', 'Close', { duration: 3000 });
       }
     });

@@ -147,7 +147,6 @@ export class AddOrderComponent implements OnInit {
         this.isEditMode = false;
         this.router.navigate(['/search-orders']); 
       } else {
-        console.log("no edit mode found");
         this.router.navigate(['/search-orders']); 
       }
   }

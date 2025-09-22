@@ -30,7 +30,6 @@ export class AdminGuard implements CanActivate {
       }),
       catchError((error) => {
         // If any check fails, redirect to login
-        console.error('Admin check failed:', error);
         this.router.navigate(['/login']);
         return [false];
       })

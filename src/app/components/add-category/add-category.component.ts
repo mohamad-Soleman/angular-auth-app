@@ -28,7 +28,6 @@ export class AddCategoryComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.error = 'שגיאה בטעינת הקטגוריות';
         this.loading = false;
       }
@@ -50,7 +49,6 @@ export class AddCategoryComponent implements OnInit {
           this.loadCategories(); // Reload the categories list
         },
         error: (error) => {
-          console.error('Error adding category:', error);
           if (error.status === 409) {
             this.error = 'קטגוריה זו כבר קיימת במערכת';
           } else {
