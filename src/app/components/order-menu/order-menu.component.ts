@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   OrderMenuService,
@@ -23,20 +22,16 @@ export class OrderMenuComponent implements OnInit {
   categories: Category[] = [];
   selectedItems: Map<string, {categoryId: string}> = new Map();
   generalNotes: string = '';
-  menuForm: FormGroup;
   isLoading = true;
   isSubmitting = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
     private orderMenuService: OrderMenuService,
     private orderService: OrderService,
     private snackBar: MatSnackBar
-  ) {
-    this.menuForm = this.fb.group({});
-  }
+  ) {}
 
   ngOnInit(): void {
     this.orderId = this.route.snapshot.paramMap.get('orderId') || '';
