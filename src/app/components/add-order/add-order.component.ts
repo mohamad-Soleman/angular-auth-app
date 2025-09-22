@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderService } from '../../services/order.service';
-import { Order, OrderType } from '../../models/order.model';
+import { Order, OrderType, ExtrasOptions } from '../../models/order.model';
 import { OrderMenuDialogComponent, OrderMenuDialogData } from '../order-menu-dialog/order-menu-dialog.component';
 
 @Component({
@@ -16,6 +16,7 @@ export class AddOrderComponent implements OnInit {
     fullName: '',
     phone: '',
     anotherPhone: '',
+    anotherName: '',
     price: null as any,
     minGuests: null as any,
     maxGuests: null as any,
@@ -25,10 +26,12 @@ export class AddOrderComponent implements OnInit {
     orderAmount: 0,
     paidAmount: null as any,
     orderType: '',
-    comments: ''
+    comments: '',
+    extras: []
   };
 
   orderTypes = Object.values(OrderType);
+  extrasOptions = Object.values(ExtrasOptions);
   message = '';
   isEditMode = false;
   buttonText = ''
@@ -56,7 +59,8 @@ export class AddOrderComponent implements OnInit {
       const order: Order = JSON.parse(orderData);
       this.orderData = {
         ...order,
-        date: new Date(order.date).toISOString()
+        date: new Date(order.date).toISOString(),
+        extras: Array.isArray(order.extras) ? order.extras : (order.extras ? this.parseExtras(order.extras) : [])
       };
       localStorage.removeItem('editingOrder');
     } else {
@@ -173,5 +177,42 @@ export class AddOrderComponent implements OnInit {
         this.router.navigate(['/search-orders']);
       }
     });
+  }
+
+  // Method to handle extras selection
+  toggleExtra(extra: string): void {
+    if (!this.orderData.extras) {
+      this.orderData.extras = [];
+    }
+    
+    const index = this.orderData.extras.indexOf(extra);
+    if (index > -1) {
+      // Remove if already selected
+      this.orderData.extras.splice(index, 1);
+    } else {
+      // Add if not selected
+      this.orderData.extras.push(extra);
+    }
+  }
+
+  // Method to check if an extra is selected
+  isExtraSelected(extra: string): boolean {
+    return this.orderData.extras ? this.orderData.extras.includes(extra) : false;
+  }
+
+  // Helper method to parse extras safely
+  private parseExtras(extras: any): string[] {
+    try {
+      if (Array.isArray(extras)) {
+        return extras;
+      }
+      if (typeof extras === 'string') {
+        return JSON.parse(extras);
+      }
+      return [];
+    } catch (error) {
+      console.error('Error parsing extras:', error);
+      return [];
+    }
   }
 }

@@ -127,8 +127,14 @@ export class SearchOrdersComponent implements OnInit {
   }
 
   editOrder(order: Order) {
+    // Ensure extras is properly formatted as an array
+    const orderForEdit = {
+      ...order,
+      extras: Array.isArray(order.extras) ? order.extras : (order.extras ? this.parseExtras(order.extras) : [])
+    };
+    
     // Store the order data for editing
-    localStorage.setItem('editingOrder', JSON.stringify(order));
+    localStorage.setItem('editingOrder', JSON.stringify(orderForEdit));
     // Navigate to add-order component for editing
     this.router.navigate(['/add-order'], { queryParams: { edit: 'true' } });
   }
@@ -168,6 +174,22 @@ export class SearchOrdersComponent implements OnInit {
       // You could add a snackbar notification here for user feedback
     } finally {
       this.isGeneratingReport = false;
+    }
+  }
+
+  // Helper method to parse extras safely
+  private parseExtras(extras: any): string[] {
+    try {
+      if (Array.isArray(extras)) {
+        return extras;
+      }
+      if (typeof extras === 'string') {
+        return JSON.parse(extras);
+      }
+      return [];
+    } catch (error) {
+      console.error('Error parsing extras:', error);
+      return [];
     }
   }
 }

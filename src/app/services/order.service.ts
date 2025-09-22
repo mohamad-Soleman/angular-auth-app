@@ -9,6 +9,7 @@ interface OrderResponse {
   full_name: string;
   phone: string;
   another_phone: string;
+  another_name?: string;
   price: number;
   min_guests: number;
   max_guests: number;
@@ -19,6 +20,7 @@ interface OrderResponse {
   paid_amount: number;
   order_type: string;
   comments?: string;
+  extras?: string[];
 }
 
 @Injectable({
@@ -47,6 +49,7 @@ export class OrderService {
           fullName: order.full_name,
           phone: order.phone,
           anotherPhone: order.another_phone,
+          anotherName: order.another_name,
           price: order.price,
           minGuests: order.min_guests,
           maxGuests: order.max_guests,
@@ -56,7 +59,8 @@ export class OrderService {
           orderAmount: order.order_amount,
           paidAmount: order.paid_amount,
           orderType: order.order_type,
-          comments: order.comments
+          comments: order.comments,
+          extras: order.extras
         })))
       );
   }
@@ -73,6 +77,7 @@ export class OrderService {
           fullName: order.full_name,
           phone: order.phone,
           anotherPhone: order.another_phone,
+          anotherName: order.another_name,
           price: order.price,
           minGuests: order.min_guests,
           maxGuests: order.max_guests,
@@ -82,7 +87,8 @@ export class OrderService {
           orderAmount: order.order_amount,
           paidAmount: order.paid_amount,
           orderType: order.order_type,
-          comments: order.comments
+          comments: order.comments,
+          extras: order.extras
         })))
       );
   }
@@ -98,6 +104,7 @@ export class OrderService {
           fullName: response.data.full_name,
           phone: response.data.phone,
           anotherPhone: response.data.another_phone,
+          anotherName: response.data.another_name,
           price: response.data.price,
           minGuests: response.data.min_guests,
           maxGuests: response.data.max_guests,
@@ -107,7 +114,8 @@ export class OrderService {
           orderAmount: response.data.order_amount,
           paidAmount: response.data.paid_amount,
           orderType: response.data.order_type,
-          comments: response.data.comments
+          comments: response.data.comments,
+          extras: response.data.extras
         } : undefined
       }))
     );

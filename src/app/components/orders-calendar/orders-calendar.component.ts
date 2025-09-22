@@ -76,13 +76,15 @@ export class OrdersCalendarComponent implements OnInit {
           fullName: order.fullName,
           phone: order.phone,
           anotherPhone: order.anotherPhone,
+          anotherName: order.anotherName,
           price: order.price,
           minGuests: order.minGuests,
           maxGuests: order.maxGuests,
           orderType: order.orderType,
           orderAmount: order.orderAmount,
           paidAmount: order.paidAmount,
-          comments: order.comments
+          comments: order.comments,
+          extras: order.extras
         }
       }));
       this.calendarOptions.events = this.dummyOrdersNew;
