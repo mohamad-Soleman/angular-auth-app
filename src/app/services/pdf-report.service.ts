@@ -11,6 +11,12 @@ export class PdfReportService {
 
   constructor(private orderMenuService: OrderMenuService) {}
 
+  private isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           (window.innerWidth <= 768) ||
+           ('ontouchstart' in window);
+  }
+
   private generateHTMLReport(order: Order, menuItems: OrderMenuItem[], generalNotes: string, categories: any[]): string {
     const groupedItems = this.groupMenuItemsByCategory(menuItems, categories);
     
@@ -367,6 +373,15 @@ export class PdfReportService {
 
   async generateOrderReport(order: Order): Promise<void> {
     try {
+      // Check if device is mobile
+      const isMobile = this.isMobileDevice();
+      
+      if (isMobile) {
+        // Use mobile-friendly PDF generation
+        await this.generateMobilePDF(order);
+        return;
+      }
+
       // Get order menu data
       const menuResponse = await this.orderMenuService.getOrderMenu(order.id!).toPromise();
       
@@ -1061,5 +1076,141 @@ export class PdfReportService {
     
     console.log('Grouped menu items:', grouped);
     return grouped;
+  }
+
+  private async generateMobilePDF(order: Order): Promise<void> {
+    try {
+      // Get order menu data
+      const menuResponse = await this.orderMenuService.getOrderMenu(order.id!).toPromise();
+      
+      let menuItems: OrderMenuItem[] = [];
+      let generalNotes = '';
+      
+      if (menuResponse?.data) {
+        if (Array.isArray(menuResponse.data)) {
+          menuItems = menuResponse.data;
+        } else if (typeof menuResponse.data === 'object' && 'items' in menuResponse.data) {
+          menuItems = menuResponse.data.items || [];
+          generalNotes = menuResponse.data.general_notes || '';
+        }
+      }
+
+      // Get categories
+      const categoriesResponse = await this.orderMenuService.getCategoriesWithSubCategories().toPromise();
+      const categories = categoriesResponse?.data || [];
+
+      // Create a simple text-based report for mobile
+      const reportContent = this.generateMobileReportContent(order, menuItems, generalNotes, categories);
+      
+      // Create a new window with the report content
+      const newWindow = window.open('', '_blank');
+      if (newWindow) {
+        newWindow.document.write(reportContent);
+        newWindow.document.close();
+        
+        // Add print functionality
+        newWindow.focus();
+        setTimeout(() => {
+          newWindow.print();
+        }, 500);
+      } else {
+        // Fallback: show alert with instructions
+        alert('דוח הוכן! אנא השתמש בפונקציית הדפסה של הדפדפן כדי לשמור את הדוח כ-PDF.');
+      }
+      
+    } catch (error) {
+      console.error('Error generating mobile PDF report:', error);
+      throw new Error('Error generating mobile report');
+    }
+  }
+
+  private generateMobileReportContent(order: Order, menuItems: OrderMenuItem[], generalNotes: string, categories: any[]): string {
+    const groupedItems = this.groupMenuItemsByCategory(menuItems, categories);
+    
+    let menuContent = '';
+    for (const [categoryName, items] of Object.entries(groupedItems)) {
+      menuContent += `<h3>${categoryName}</h3><ul>`;
+      for (const item of items) {
+        menuContent += `<li>${item.sub_category_name}`;
+        if (item.notes) {
+          menuContent += ` - ${item.notes}`;
+        }
+        menuContent += `</li>`;
+      }
+      menuContent += `</ul>`;
+    }
+
+    return `
+      <!DOCTYPE html>
+      <html dir="rtl" lang="he">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>דוח הזמנה - ${order.fullName}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+            line-height: 1.6;
+          }
+          h1, h2, h3 {
+            color: #333;
+            border-bottom: 2px solid #3f51b5;
+            padding-bottom: 10px;
+          }
+          .order-details {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+          }
+          .menu-section {
+            margin-bottom: 20px;
+          }
+          @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>דוח הזמנה</h1>
+        
+        <div class="order-details">
+          <h2>פרטי ההזמנה</h2>
+          <p><strong>שם הלקוח:</strong> ${order.fullName}</p>
+          <p><strong>טלפון:</strong> ${order.phone}</p>
+          ${order.anotherPhone ? `<p><strong>טלפון נוסף:</strong> ${order.anotherPhone}</p>` : ''}
+          <p><strong>סוג האירוע:</strong> ${order.orderType}</p>
+          <p><strong>תאריך האירוע:</strong> ${order.date}</p>
+          <p><strong>שעת התחלה:</strong> ${order.startTime}</p>
+          <p><strong>שעת סיום:</strong> ${order.endTime}</p>
+          ${order.minGuests && order.maxGuests ? `<p><strong>מספר אורחים:</strong> ${order.minGuests} - ${order.maxGuests}</p>` : ''}
+          ${order.comments ? `<p><strong>הערות:</strong> ${order.comments}</p>` : ''}
+          ${order.price ? `<p><strong>מחיר בסיס:</strong> ₪${order.price}</p>` : ''}
+        </div>
+
+        <div class="menu-section">
+          <h2>פרטי התפריט</h2>
+          ${menuContent}
+        </div>
+
+        ${generalNotes ? `
+        <div class="menu-section">
+          <h2>הערות כלליות לתפריט</h2>
+          <p>${generalNotes}</p>
+        </div>
+        ` : ''}
+
+        <div class="no-print" style="margin-top: 30px; text-align: center;">
+          <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; background: #3f51b5; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            הדפס דוח
+          </button>
+        </div>
+      </body>
+      </html>
+    `;
   }
 }
