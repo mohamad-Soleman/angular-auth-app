@@ -62,10 +62,10 @@
               <div class="panel-header-content">
                 <span class="order-date">{{ formatDate(order.date) }}</span>
                 <div class="panel-description">
-                  <span class="status-badge" *ngIf="isAdmin() && getOrderStatus(order).text" [style.background-color]="getOrderStatus(order).color">
+                  <span class="status-badge" *ngIf="(isAdmin() | async) && getOrderStatus(order).text" [style.background-color]="getOrderStatus(order).color">
                     {{ getOrderStatus(order).text }}
                   </span>
-                  <span class="order-amount" *ngIf="isAdmin() && order.orderAmount !== undefined">₪{{ order.orderAmount }}</span>
+                  <span class="order-amount" *ngIf="(isAdmin() | async) && order.orderAmount !== undefined">₪{{ order.orderAmount }}</span>
                 </div>
               </div>
             </mat-panel-description>
@@ -116,31 +116,31 @@
                 <span class="value">{{ order.minGuests }} - {{ order.maxGuests }}</span>
               </div>
 
-              <div class="detail-row" *ngIf="isAdmin() && order.price !== undefined">
+              <div class="detail-row" *ngIf="(isAdmin() | async) && order.price !== undefined">
                 <mat-icon>attach_money</mat-icon>
                 <span class="label">מחיר:</span>
                 <span class="value">₪{{ order.price }}</span>
               </div>
 
-              <div class="detail-row" *ngIf="isAdmin() && order.orderAmount !== undefined">
+              <div class="detail-row" *ngIf="(isAdmin() | async) && order.orderAmount !== undefined">
                 <mat-icon>calculate</mat-icon>
                 <span class="label">סכום כולל:</span>
                 <span class="value">₪{{ order.orderAmount }}</span>
               </div>
 
-              <div class="detail-row" *ngIf="isAdmin() && order.paidAmount !== undefined">
+              <div class="detail-row" *ngIf="(isAdmin() | async) && order.paidAmount !== undefined">
                 <mat-icon>payment</mat-icon>
                 <span class="label">סכום ששולם:</span>
                 <span class="value">₪{{ order.paidAmount }}</span>
               </div>
 
-              <div class="detail-row" *ngIf="isAdmin() && order.orderAmount !== undefined && order.paidAmount !== undefined">
+              <div class="detail-row" *ngIf="(isAdmin() | async) && order.orderAmount !== undefined && order.paidAmount !== undefined">
                 <mat-icon>account_balance_wallet</mat-icon>
                 <span class="label">יתרה לתשלום:</span>
                 <span class="value">₪{{ getRemainingAmount(order) }}</span>
               </div>
 
-              <div class="detail-row" *ngIf="isAdmin() && order.paidAmount !== undefined && order.orderAmount !== undefined && getOrderStatus(order).text">
+              <div class="detail-row" *ngIf="(isAdmin() | async) && order.paidAmount !== undefined && order.orderAmount !== undefined && getOrderStatus(order).text">
                 <mat-icon>info</mat-icon>
                 <span class="label">סטטוס תשלום:</span>
                 <span class="value status-text" [style.color]="getOrderStatus(order).color">
@@ -155,7 +155,7 @@
               </div>
             </div>
             <!-- Admin Actions -->
-            <div *ngIf="isAdmin()" class="admin-actions">
+            <div *ngIf="(isAdmin() | async)" class="admin-actions">
               <button mat-raised-button color="accent" (click)="editOrder(order)" class="edit-button">
                 <mat-icon>edit</mat-icon>
                 ערוך הזמנה
