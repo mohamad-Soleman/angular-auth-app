@@ -372,6 +372,25 @@
   /* background-color: #45a049; */
 }
 
+.report-button {
+  width: 160px;
+  min-width: 160px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.report-button:hover {
+  transform: translateY(-1px);
+}
+
+.report-button mat-icon {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
 .no-orders {
   display: flex;
   flex-direction: column;
@@ -554,7 +573,8 @@
   }
 
   .edit-button,
-  .menu-button {
+  .menu-button,
+  .report-button {
     width: 100%;
     min-width: auto;
   }

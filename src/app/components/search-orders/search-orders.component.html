@@ -180,6 +180,18 @@
                     הוסף תפריט
                   </button>
                 </ng-template>
+
+                <!-- Report Button - Only show if order has menu -->
+                <button mat-raised-button
+                        color="warn"
+                        (click)="generateReport(order)"
+                        class="report-button"
+                        *ngIf="checkOrderHasMenu(order.id!)"
+                        [disabled]="isGeneratingReport">
+                  <mat-icon *ngIf="!isGeneratingReport">picture_as_pdf</mat-icon>
+                  <mat-spinner diameter="16" *ngIf="isGeneratingReport"></mat-spinner>
+                  {{ isGeneratingReport ? 'יוצר דוח...' : 'דוח PDF' }}
+                </button>
               </div>
             </div>
           

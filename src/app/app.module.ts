@@ -39,6 +39,7 @@ import { AppComponent } from './app.component';
 
 import { AuthService } from './services/auth.service';
 import { UserStoreService } from './services/user-store.service';
+import { PdfReportService } from './services/pdf-report.service';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
@@ -90,6 +91,7 @@ import { authInterceptor } from './interceptors/auth.interceptor';
   providers: [
     AuthService,
     UserStoreService,
+    PdfReportService,
     AuthGuard,
     AdminGuard,
     provideHttpClient(withInterceptors([authInterceptor])) 
