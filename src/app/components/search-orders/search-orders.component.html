@@ -80,6 +80,12 @@
                 <span class="value">{{ order.fullName }}</span>
               </div>
 
+              <div class="detail-row" *ngIf="order.anotherName">
+                <mat-icon>person_add</mat-icon>
+                <span class="label">שם נוסף:</span>
+                <span class="value">{{ order.anotherName }}</span>
+              </div>
+
               <div class="detail-row">
                 <mat-icon>phone</mat-icon>
                 <span class="label">טלפון:</span>
@@ -152,6 +158,16 @@
                 <mat-icon>comment</mat-icon>
                 <span class="label">הערות:</span>
                 <span class="value">{{ order.comments }}</span>
+              </div>
+
+              <div class="detail-row" *ngIf="order.extras && order.extras.length > 0">
+                <mat-icon>add_circle</mat-icon>
+                <span class="label">תוספות:</span>
+                <div class="extras-list">
+                  <span class="extra-item" *ngFor="let extra of order.extras">
+                    {{ extra }}
+                  </span>
+                </div>
               </div>
             </div>
             <!-- Admin Actions -->

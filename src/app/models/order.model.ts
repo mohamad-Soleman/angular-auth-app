@@ -3,6 +3,7 @@ export interface Order {
   fullName: string;
   phone: string;
   anotherPhone?: string;  // Optional field
+  anotherName?: string;   // Optional field
   price?: number;  // Optional for non-admin users
   minGuests?: number;  // Can be null initially
   maxGuests?: number;  // Can be null initially
@@ -13,6 +14,7 @@ export interface Order {
   paidAmount?: number;   // Optional for non-admin users
   orderType: string;
   comments?: string;
+  extras?: string[];     // Optional field - array of selected extra items
 }
 
 // Helper type for calendar view
@@ -25,6 +27,7 @@ export interface OrderEvent {
     fullName: string;
     phone: string;
     anotherPhone: string;
+    anotherName?: string;   // Optional field
     price?: number;     // Optional for non-admin users
     minGuests?: number;  // Can be null initially
     maxGuests?: number;  // Can be null initially
@@ -32,6 +35,7 @@ export interface OrderEvent {
     orderAmount?: number;  // Optional for non-admin users
     paidAmount?: number;   // Optional for non-admin users
     comments?: string;
+    extras?: string[];     // Optional field - array of selected extra items
   };
 }
 
@@ -42,6 +46,15 @@ export enum OrderType {
   BIRTHDAY = 'יום הולדת',
   CORPORATE = 'אירוע עסקי',
   OTHER = 'אחר'
+}
+
+// Extras options enumeration
+export enum ExtrasOptions {
+  ZINA = 'زينة',
+  BUFFET = 'بوفيه',
+  BAND = 'فرقة',
+  DJ = 'DJ',
+  SELFIE = 'סלפי'
 }
 
 // Order status helper

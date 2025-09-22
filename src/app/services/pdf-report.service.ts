@@ -577,6 +577,10 @@ export class PdfReportService {
             <span class="detail-value">${order.anotherPhone || 'לא צוין'}</span>
           </div>
           <div class="detail-row">
+            <span class="detail-label">שם נוסף:</span>
+            <span class="detail-value">${order.anotherName || 'לא צוין'}</span>
+          </div>
+          <div class="detail-row">
             <span class="detail-label">סוג האירוע:</span>
             <span class="detail-value">${order.orderType}</span>
           </div>
@@ -600,6 +604,12 @@ export class PdfReportService {
             <span class="detail-label">הערות:</span>
             <span class="detail-value">${order.comments || 'אין הערות'}</span>
           </div>
+          ${order.extras && order.extras.length > 0 ? `
+          <div class="detail-row">
+            <span class="detail-label">תוספות:</span>
+            <span class="detail-value">${order.extras.join(', ')}</span>
+          </div>
+          ` : ''}
           <div class="detail-row">
             <span class="detail-label">מחיר בסיס:</span>
             <span class="detail-value">₪${order.price || 'לא צוין'}</span>
@@ -1183,12 +1193,19 @@ export class PdfReportService {
           <p><strong>שם הלקוח:</strong> ${order.fullName}</p>
           <p><strong>טלפון:</strong> ${order.phone}</p>
           ${order.anotherPhone ? `<p><strong>טלפון נוסף:</strong> ${order.anotherPhone}</p>` : ''}
+          ${order.anotherName ? `<p><strong>שם נוסף:</strong> ${order.anotherName}</p>` : ''}
           <p><strong>סוג האירוע:</strong> ${order.orderType}</p>
           <p><strong>תאריך האירוע:</strong> ${order.date}</p>
           <p><strong>שעת התחלה:</strong> ${order.startTime}</p>
           <p><strong>שעת סיום:</strong> ${order.endTime}</p>
           ${order.minGuests && order.maxGuests ? `<p><strong>מספר אורחים:</strong> ${order.minGuests} - ${order.maxGuests}</p>` : ''}
           ${order.comments ? `<p><strong>הערות:</strong> ${order.comments}</p>` : ''}
+          ${order.extras && order.extras.length > 0 ? `
+            <p><strong>תוספות:</strong></p>
+            <ul>
+              ${order.extras.map(extra => `<li>${extra}</li>`).join('')}
+            </ul>
+          ` : ''}
           ${order.price ? `<p><strong>מחיר בסיס:</strong> ₪${order.price}</p>` : ''}
         </div>
 

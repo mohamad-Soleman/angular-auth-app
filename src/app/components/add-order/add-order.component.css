@@ -69,6 +69,73 @@
   text-align: center;
 }
 
+/* Extras Section Styling */
+.extras-section {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.extras-section h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.extras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.extra-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.extra-item:hover {
+  border-color: #3f51b5;
+  background-color: #f5f5f5;
+}
+
+.extra-item.selected {
+  border-color: #3f51b5;
+  background-color: #e3f2fd;
+  box-shadow: 0 1px 3px rgba(63, 81, 181, 0.2);
+}
+
+.extra-item mat-checkbox {
+  margin: 0;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.extra-item mat-checkbox ::ng-deep .mat-checkbox-label {
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.extra-item mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.extra-item mat-checkbox ::ng-deep .mat-checkbox-frame {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .form-row {

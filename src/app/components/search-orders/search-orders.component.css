@@ -597,3 +597,27 @@
   justify-content: flex-end;
   margin-right: 16px;
 }
+
+/* Extras list styling */
+.extras-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.extra-item {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #bbdefb;
+  white-space: nowrap;
+}
+
+.extra-item:before {
+  content: "• ";
+  margin-right: 4px;
+}
