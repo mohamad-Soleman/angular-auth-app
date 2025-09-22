@@ -56,7 +56,6 @@ export class SubCategoryService {
         this.subCategoriesSubject.next(response.sub_categories || []);
       },
       error: (error) => {
-        console.error('Error loading sub-categories:', error);
         this.subCategoriesSubject.next([]);
       }
     });

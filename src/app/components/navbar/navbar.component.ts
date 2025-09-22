@@ -36,9 +36,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       catchError(() => of(false))
     );
 
-    // Initial check to set the auth status
-    this.auth.isAuthenticated().subscribe(isAuth => {
-      this.auth.updateAuthStatus(isAuth);
+    // Initialize authentication state on component load
+    this.auth.initializeAuthState().subscribe({
+      next: (isAuth) => {
+        // Auth state is already updated by initializeAuthState
+      },
+      error: (error) => {
+        // Authentication state initialization failed
+      }
     });
   }
 

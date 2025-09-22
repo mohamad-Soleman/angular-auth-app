@@ -312,22 +312,20 @@
 }
 
 .admin-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   padding: 16px 0 8px 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: 16px;
 }
 
-.menu-actions {
+.admin-buttons {
   display: flex;
-  justify-content: flex-end;
   gap: 12px;
+  justify-content: flex-start;
 }
 
 .edit-button {
-  min-width: 140px;
+  width: 160px;
+  min-width: 160px;
   height: 40px;
   font-size: 14px;
   font-weight: 500;
@@ -346,7 +344,8 @@
 }
 
 .menu-button {
-  min-width: 140px;
+  width: 160px;
+  min-width: 160px;
   height: 40px;
   font-size: 14px;
   font-weight: 500;
@@ -371,6 +370,25 @@
 
 .menu-button.add-menu:hover {
   /* background-color: #45a049; */
+}
+
+.report-button {
+  width: 160px;
+  min-width: 160px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.report-button:hover {
+  transform: translateY(-1px);
+}
+
+.report-button mat-icon {
+  margin-left: 8px;
+  font-size: 18px;
 }
 
 .no-orders {
@@ -549,18 +567,14 @@
     margin-bottom: 8px;
   }
 
-  .admin-actions {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .menu-actions {
+  .admin-buttons {
     flex-direction: column;
     gap: 8px;
   }
 
   .edit-button,
-  .menu-button {
+  .menu-button,
+  .report-button {
     width: 100%;
     min-width: auto;
   }

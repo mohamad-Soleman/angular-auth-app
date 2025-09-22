@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -12,11 +12,16 @@ export class AuthGuard implements CanActivate {
     return this.auth.isAuthenticated().pipe(
       map(isAuth => {
         if (!isAuth) {
-          // Cookies are handled by the server, just redirect
+          // Authentication failed, redirect to login
           this.router.navigate(['/login']);
           return false;
         }
         return true;
+      }),
+      catchError((error) => {
+        // If authentication check fails, redirect to login
+        this.router.navigate(['/login']);
+        return [false];
       })
     );
   }

@@ -55,31 +55,31 @@
             <span class="value">{{ selectedEvent.extendedProps.minGuests }} - {{ selectedEvent.extendedProps.maxGuests }}</span>
           </div>
           
-          <div class="info-row" *ngIf="isAdmin() && selectedEvent.extendedProps.price !== undefined">
+          <div class="info-row" *ngIf="(isAdmin() | async) && selectedEvent.extendedProps.price !== undefined">
             <mat-icon>attach_money</mat-icon>
             <span class="label">מחיר:</span>
             <span class="value">₪{{ selectedEvent.extendedProps.price }}</span>
           </div>
           
-          <div class="info-row" *ngIf="isAdmin() && selectedEvent.extendedProps.orderAmount !== undefined">
+          <div class="info-row" *ngIf="(isAdmin() | async) && selectedEvent.extendedProps.orderAmount !== undefined">
             <mat-icon>calculate</mat-icon>
             <span class="label">סכום כולל:</span>
             <span class="value">₪{{ selectedEvent.extendedProps.orderAmount }}</span>
           </div>
           
-          <div class="info-row" *ngIf="isAdmin() && selectedEvent.extendedProps.paidAmount !== undefined">
+          <div class="info-row" *ngIf="(isAdmin() | async) && selectedEvent.extendedProps.paidAmount !== undefined">
             <mat-icon>payment</mat-icon>
             <span class="label">סכום ששולם:</span>
             <span class="value">₪{{ selectedEvent.extendedProps.paidAmount }}</span>
           </div>
           
-          <div class="info-row" *ngIf="isAdmin() && selectedEvent.extendedProps.orderAmount !== undefined && selectedEvent.extendedProps.paidAmount !== undefined">
+          <div class="info-row" *ngIf="(isAdmin() | async) && selectedEvent.extendedProps.orderAmount !== undefined && selectedEvent.extendedProps.paidAmount !== undefined">
             <mat-icon>account_balance_wallet</mat-icon>
             <span class="label">יתרה לתשלום:</span>
             <span class="value">₪{{ getRemainingAmount(selectedEvent) }}</span>
           </div>
           
-          <div class="info-row" *ngIf="isAdmin() && selectedEvent.extendedProps.paidAmount !== undefined && selectedEvent.extendedProps.orderAmount !== undefined && getStatusText(selectedEvent)">
+          <div class="info-row" *ngIf="(isAdmin() | async) && selectedEvent.extendedProps.paidAmount !== undefined && selectedEvent.extendedProps.orderAmount !== undefined && getStatusText(selectedEvent)">
             <mat-icon>info</mat-icon>
             <span class="label">סטטוס תשלום:</span>
             <span class="value status" [style.color]="getStatusColor(selectedEvent)">

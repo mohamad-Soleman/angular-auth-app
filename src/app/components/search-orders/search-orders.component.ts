@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { OrderMenuService } from '../../services/order-menu.service';
+import { PdfReportService } from '../../services/pdf-report.service';
 import { Order, getOrderStatus } from '../../models/order.model';
 import { Observable } from 'rxjs';
 
@@ -24,11 +25,15 @@ export class SearchOrdersComponent implements OnInit {
 
   // Cache for order menu status to prevent infinite requests
   orderMenuCache = new Map<string, boolean>();
+  
+  // Report generation state
+  isGeneratingReport = false;
 
   constructor(
     private orderService: OrderService,
     private authService: AuthService,
     private orderMenuService: OrderMenuService,
+    private pdfReportService: PdfReportService,
     private router: Router
   ) {}
 
@@ -36,20 +41,6 @@ export class SearchOrdersComponent implements OnInit {
     // Don't load orders automatically - wait for search
   }
 
-  loadOrders() {
-    this.loading = true;
-    this.orderService.getAllOrders().subscribe({
-      next: (orders) => {
-        this.orders = this.sortOrdersByDate(orders);
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'שגיאה בטעינת ההזמנות';
-        this.loading = false;
-        console.error('Error loading orders:', err);
-      }
-    });
-  }
 
   searchOrders() {
     if (!this.startDate || !this.endDate) {
@@ -84,7 +75,6 @@ export class SearchOrdersComponent implements OnInit {
         this.error = 'שגיאה בחיפוש ההזמנות';
         this.searching = false;
         this.loading = false;
-        console.error('Error searching orders:', err);
       }
     });
   }
@@ -164,5 +154,20 @@ export class SearchOrdersComponent implements OnInit {
         });
       }
     });
+  }
+
+  async generateReport(order: Order): Promise<void> {
+    if (this.isGeneratingReport) return;
+    
+    this.isGeneratingReport = true;
+    
+    try {
+      await this.pdfReportService.generateOrderReport(order);
+    } catch (error) {
+      console.error('Error generating report:', error);
+      // You could add a snackbar notification here for user feedback
+    } finally {
+      this.isGeneratingReport = false;
+    }
   }
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   OrderMenuService,
@@ -23,20 +22,16 @@ export class OrderMenuComponent implements OnInit {
   categories: Category[] = [];
   selectedItems: Map<string, {categoryId: string}> = new Map();
   generalNotes: string = '';
-  menuForm: FormGroup;
   isLoading = true;
   isSubmitting = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
     private orderMenuService: OrderMenuService,
     private orderService: OrderService,
     private snackBar: MatSnackBar
-  ) {
-    this.menuForm = this.fb.group({});
-  }
+  ) {}
 
   ngOnInit(): void {
     this.orderId = this.route.snapshot.paramMap.get('orderId') || '';
@@ -59,7 +54,6 @@ export class OrderMenuComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading order:', error);
         this.snackBar.open('Error loading order details', 'Close', { duration: 3000 });
         this.router.navigate(['/search-orders']);
       }
@@ -70,19 +64,15 @@ export class OrderMenuComponent implements OnInit {
     // Load categories with sub-categories
     this.orderMenuService.getCategoriesWithSubCategories().subscribe({
       next: (response) => {
-        console.log('Categories response:', response); // Debug log
         if (response.success) {
           this.categories = response.data || [];
-          console.log('Loaded categories:', this.categories); // Debug log
           this.loadExistingMenu();
         } else {
-          console.log('Failed to load categories:', response.message); // Debug log
           this.snackBar.open('Failed to load menu categories', 'Close', { duration: 3000 });
           this.isLoading = false;
         }
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.snackBar.open('Error loading menu categories', 'Close', { duration: 3000 });
         this.isLoading = false;
       }
@@ -108,7 +98,6 @@ export class OrderMenuComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading existing menu:', error);
         this.isLoading = false;
       }
     });
@@ -207,7 +196,6 @@ export class OrderMenuComponent implements OnInit {
       },
       error: (error) => {
         this.isSubmitting = false;
-        console.error('Error saving order menu:', error);
         this.snackBar.open('שגיאה בשמירת התפריט', 'Close', { duration: 3000 });
       }
     });
