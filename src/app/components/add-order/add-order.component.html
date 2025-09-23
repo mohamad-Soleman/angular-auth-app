@@ -13,23 +13,23 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>טלפון</mat-label>
-          <input matInput [(ngModel)]="orderData.phone" name="phone" required pattern="[0-9]{9,10}">
-          <mat-error *ngIf="orderForm.controls['phone']?.hasError('required')">טלפון הוא שדה חובה</mat-error>
-          <mat-error *ngIf="orderForm.controls['phone']?.hasError('pattern')">מספר טלפון לא תקין</mat-error>
+          <mat-label>שם נוסף</mat-label>
+          <input matInput [(ngModel)]="orderData.anotherName" name="anotherName">
         </mat-form-field>
       </div>
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>טלפון נוסף</mat-label>
-          <input matInput [(ngModel)]="orderData.anotherPhone" name="anotherPhone" pattern="[0-9]{9,10}">
-          <mat-error *ngIf="orderForm.controls['anotherPhone']?.hasError('pattern')">מספר טלפון נוסף לא תקין</mat-error>
+          <mat-label>טלפון</mat-label>
+          <input matInput [(ngModel)]="orderData.phone" name="phone" required pattern="[0-9]{9,10}">
+          <mat-error *ngIf="orderForm.controls['phone']?.hasError('required')">טלפון הוא שדה חובה</mat-error>
+          <mat-error *ngIf="orderForm.controls['phone']?.hasError('pattern')">מספר טלפון לא תקין</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>שם נוסף</mat-label>
-          <input matInput [(ngModel)]="orderData.anotherName" name="anotherName">
+          <mat-label>טלפון נוסף</mat-label>
+          <input matInput [(ngModel)]="orderData.anotherPhone" name="anotherPhone" pattern="[0-9]{9,10}">
+          <mat-error *ngIf="orderForm.controls['anotherPhone']?.hasError('pattern')">מספר טלפון נוסף לא תקין</mat-error>
         </mat-form-field>
       </div>
 
