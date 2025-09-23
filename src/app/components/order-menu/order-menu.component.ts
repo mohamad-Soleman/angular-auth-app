@@ -165,11 +165,6 @@ export class OrderMenuComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.isMenuComplete()) {
-      this.snackBar.open('יש להשלים את כל הקטגוריות', 'Close', { duration: 3000 });
-      return;
-    }
-
     if (this.isSubmitting) return;
     
     this.isSubmitting = true;
