@@ -33,18 +33,19 @@
   <mat-card class="menu-form-card" *ngIf="!isLoading">
     <mat-card-header>
       <mat-card-title>תפריט האוכל</mat-card-title>
-      <mat-card-subtitle>בחר מנות מכל קטגוריה (חובה)</mat-card-subtitle>
+      <mat-card-subtitle>בחר מנות מהקטגוריות הרצויות (אופציונלי)</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <form (ngSubmit)="onSubmit()">
         
         <!-- Category-based Menu Selection -->
         <div class="categories-container">
-          <mat-accordion *ngFor="let category of categories; let categoryIndex = index" class="category-accordion">
+          <mat-accordion multi="false" class="category-accordion">
             <mat-expansion-panel
+              *ngFor="let category of categories; let categoryIndex = index"
               [expanded]="categoryIndex === 0"
               class="category-panel"
-              [class.category-incomplete]="!isCategoryComplete(category.id)">
+              [class.category-has-selection]="getSelectedCountForCategory(category.id) > 0">
               
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -53,9 +54,9 @@
                     <span class="category-name">{{ category.name }}</span>
                     <mat-icon
                       class="status-icon"
-                      [class.complete]="isCategoryComplete(category.id)"
-                      [class.incomplete]="!isCategoryComplete(category.id)">
-                      {{ isCategoryComplete(category.id) ? 'check_circle' : 'error' }}
+                      [class.has-selection]="getSelectedCountForCategory(category.id) > 0"
+                      [class.no-selection]="getSelectedCountForCategory(category.id) === 0">
+                      {{ getSelectedCountForCategory(category.id) > 0 ? 'check_circle' : 'radio_button_unchecked' }}
                     </mat-icon>
                   </div>
                 </mat-panel-title>
@@ -84,11 +85,6 @@
                 </div>
               </div>
 
-              <!-- Category Validation Message -->
-              <div *ngIf="!isCategoryComplete(category.id)" class="category-warning">
-                <mat-icon color="warn">warning</mat-icon>
-                <span>יש לבחור לפחות מנה אחת מקטגוריה זו</span>
-              </div>
 
             </mat-expansion-panel>
           </mat-accordion>
@@ -114,7 +110,7 @@
         </mat-card>
 
         <!-- General Menu Notes -->
-        <mat-card class="menu-notes-card" *ngIf="getSelectedItemsCount() > 0">
+        <mat-card class="menu-notes-card">
           <mat-card-header>
             <mat-card-title>הערות כלליות לתפריט</mat-card-title>
           </mat-card-header>
@@ -129,12 +125,18 @@
           </mat-card-content>
         </mat-card>
 
+        <!-- Selection Summary -->
+        <div class="selection-summary" *ngIf="getSelectedItemsCount() > 0">
+          <mat-icon>check_circle</mat-icon>
+          <span>נבחרו {{ getSelectedItemsCount() }} פריטים</span>
+        </div>
+
         <!-- Action Buttons -->
         <div class="action-buttons">
           <button mat-raised-button
                   color="primary"
                   type="submit"
-                  [disabled]="!isMenuComplete() || isSubmitting"
+                  [disabled]="getSelectedItemsCount() === 0 || isSubmitting"
                   class="save-button">
             <mat-icon *ngIf="!isSubmitting">save</mat-icon>
             <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
