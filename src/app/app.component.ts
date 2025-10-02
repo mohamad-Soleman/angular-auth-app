@@ -17,10 +17,9 @@ export class AppComponent implements OnInit {
     // This ensures that the user's session is restored if they have valid cookies
     this.authService.initializeAuthState().subscribe({
       next: (isAuthenticated) => {
-        console.log('App initialized, authenticated:', isAuthenticated);
+        // Auth state initialized successfully
       },
       error: (error) => {
-        console.warn('Auth initialization failed:', error);
         // App will continue to work, user will just need to login
       }
     });

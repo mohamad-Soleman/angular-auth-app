@@ -22,7 +22,6 @@ export class AuthGuard implements CanActivate {
       }),
       catchError((error) => {
         // If authentication check fails, redirect to login
-        console.warn('Auth guard error:', error);
         this.router.navigate([AUTH_CONSTANTS.ROUTES.LOGIN]);
         return of(false);
       })

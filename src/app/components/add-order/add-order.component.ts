@@ -211,7 +211,7 @@ export class AddOrderComponent implements OnInit {
       }
       return [];
     } catch (error) {
-      console.error('Error parsing extras:', error);
+      // Error parsing extras
       return [];
     }
   }

@@ -170,7 +170,7 @@ export class SearchOrdersComponent implements OnInit {
     try {
       await this.pdfReportService.generateOrderReport(order);
     } catch (error) {
-      console.error('Error generating report:', error);
+      // Error generating report
       // You could add a snackbar notification here for user feedback
     } finally {
       this.isGeneratingReport = false;
@@ -188,7 +188,7 @@ export class SearchOrdersComponent implements OnInit {
       }
       return [];
     } catch (error) {
-      console.error('Error parsing extras:', error);
+      // Error parsing extras
       return [];
     }
   }

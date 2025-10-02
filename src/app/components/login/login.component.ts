@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         // Error is already handled by the service and displayed via subscription
-        console.warn('Login failed:', err);
         
         // Handle specific error cases for better UX
         if (err.type === 'NETWORK_ERROR') {

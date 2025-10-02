@@ -22,7 +22,6 @@ export class LoginGuard implements CanActivate {
       }),
       catchError((error) => {
         // If authentication check fails, allow access to login page
-        console.warn('Login guard error:', error);
         return of(true);
       })
     );

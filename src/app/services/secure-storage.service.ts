@@ -50,7 +50,7 @@ export class SecureStorageService {
       const encryptedValue = this.encrypt(serializedValue);
       sessionStorage.setItem(key, encryptedValue);
     } catch (error) {
-      console.warn('Failed to store data in session storage:', error);
+      // Silently handle storage errors
     }
   }
 
@@ -68,7 +68,6 @@ export class SecureStorageService {
       const decryptedValue = this.decrypt(encryptedValue);
       return JSON.parse(decryptedValue) as T;
     } catch (error) {
-      console.warn('Failed to retrieve data from session storage:', error);
       this.removeItem(key); // Clean up corrupted data
       return null;
     }
@@ -82,7 +81,7 @@ export class SecureStorageService {
     try {
       sessionStorage.removeItem(key);
     } catch (error) {
-      console.warn('Failed to remove data from session storage:', error);
+      // Silently handle storage errors
     }
   }
 
@@ -97,7 +96,7 @@ export class SecureStorageService {
         sessionStorage.removeItem(key);
       });
     } catch (error) {
-      console.warn('Failed to clear session storage:', error);
+      // Silently handle storage errors
     }
   }
 

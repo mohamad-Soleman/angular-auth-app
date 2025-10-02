@@ -447,7 +447,7 @@ export class PdfReportService {
       pdf.save(fileName);
 
     } catch (error) {
-      console.error('Error generating PDF report:', error);
+      // Error generating PDF report
       throw new Error('Error generating report');
     }
   }
@@ -1057,8 +1057,7 @@ export class PdfReportService {
     const grouped: { [categoryName: string]: OrderMenuItem[] } = {};
     
     // Debug: Log the data we have
-    console.log('Menu items for grouping:', menuItems);
-    console.log('Categories for grouping:', categories);
+    // Processing menu items and categories for grouping
     
     menuItems.forEach(item => {
       // Find the category for this subcategory
@@ -1071,12 +1070,7 @@ export class PdfReportService {
         }
       }
       
-      // Debug: Log each item mapping
-      console.log('Mapping menu item:', {
-        sub_category_id: item.sub_category_id,
-        sub_category_name: item.sub_category_name,
-        mapped_to_category: categoryName
-      });
+      // Mapping menu item to category
       
       if (!grouped[categoryName]) {
         grouped[categoryName] = [];
@@ -1084,7 +1078,7 @@ export class PdfReportService {
       grouped[categoryName].push(item);
     });
     
-    console.log('Grouped menu items:', grouped);
+    // Menu items grouped successfully
     return grouped;
   }
 
@@ -1129,7 +1123,7 @@ export class PdfReportService {
       }
       
     } catch (error) {
-      console.error('Error generating mobile PDF report:', error);
+      // Error generating mobile PDF report
       throw new Error('Error generating mobile report');
     }
   }

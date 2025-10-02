@@ -38,7 +38,6 @@ export class UserStoreService {
         }
       }
     } catch (error) {
-      console.warn('Failed to initialize user data from storage:', error);
       this.clearUserData();
     }
   }
@@ -62,7 +61,6 @@ export class UserStoreService {
       // Update subjects
       this.setUserDataInternal(userData, timestamp);
     } catch (error) {
-      console.warn('Failed to store user data:', error);
       // Still update subjects even if storage fails
       this.setUserDataInternal(userData, timestamp);
     }
@@ -80,7 +78,7 @@ export class UserStoreService {
     try {
       this.secureStorage.clear();
     } catch (error) {
-      console.warn('Failed to clear storage:', error);
+      // Silently handle storage errors
     }
     
     this.userDataSubject.next(null);
@@ -116,7 +114,7 @@ export class UserStoreService {
         this.secureStorage.setItem(AUTH_CONSTANTS.STORAGE_KEYS.SESSION_TIMESTAMP, timestamp);
         this.sessionTimestampSubject.next(timestamp);
       } catch (error) {
-        console.warn('Failed to update session timestamp:', error);
+        // Silently handle storage errors
       }
     }
   }

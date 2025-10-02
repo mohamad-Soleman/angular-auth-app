@@ -67,7 +67,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         // Logout successful, navigation is handled by the service
       },
       error: (error) => {
-        console.warn('Logout error:', error);
         // Even if logout fails, the service will clear local state
       }
     });

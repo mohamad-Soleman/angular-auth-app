@@ -107,7 +107,6 @@ export class AuthService {
           map(() => response), // Return the original login response
           catchError((whoamiError) => {
             // If whoami fails, we're still logged in via cookies, just can't do client-side validation
-            console.warn('WhoAmI failed after login:', whoamiError);
             this.authStatusSubject.next(true);
             return of(response); // Still return success
           })
@@ -167,7 +166,6 @@ export class AuthService {
       timeout(AUTH_CONSTANTS.TIMEOUTS.REQUEST_TIMEOUT),
       catchError((error) => {
         // Even if logout fails on server, clear local state
-        console.warn('Server logout failed:', error);
         return of(void 0);
       }),
       tap(() => this.clearTokensAndRedirect()),
