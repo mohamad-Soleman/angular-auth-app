@@ -13,6 +13,8 @@
           [(ngModel)]="username" 
           name="username" 
           required 
+          [disabled]="isLoading"
+          (input)="onUsernameChange()"
           #usernameCtrl="ngModel">
         <mat-error *ngIf="usernameCtrl.invalid && usernameCtrl.touched">שם משתמש הוא שדה חובה</mat-error>
       </mat-form-field>
@@ -27,12 +29,15 @@
           [(ngModel)]="password" 
           name="password" 
           required 
+          [disabled]="isLoading"
+          (input)="onPasswordChange()"
           #passwordCtrl="ngModel">
         <button 
           mat-icon-button 
           matSuffix 
           type="button" 
-          (click)="hidePassword = !hidePassword">
+          [disabled]="isLoading"
+          (click)="togglePasswordVisibility()">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         <mat-error *ngIf="passwordCtrl.invalid && passwordCtrl.touched">סיסמה הוא שדה חובה</mat-error>
@@ -42,8 +47,14 @@
         mat-raised-button 
         color="primary" 
         type="submit" 
-        [disabled]="loginForm.invalid">
-        כניסה
+        [disabled]="loginForm.invalid || isLoading">
+        <mat-progress-spinner 
+          *ngIf="isLoading" 
+          diameter="20" 
+          mode="indeterminate"
+          style="display: inline-block; margin-left: 8px;">
+        </mat-progress-spinner>
+        {{ isLoading ? 'מתחבר...' : 'כניסה' }}
       </button>
 
       <p *ngIf="error" class="error">{{ error }}</p>
