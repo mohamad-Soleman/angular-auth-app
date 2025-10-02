@@ -39,6 +39,7 @@ import { AppComponent } from './app.component';
 
 import { AuthService } from './services/auth.service';
 import { UserStoreService } from './services/user-store.service';
+import { SecureStorageService } from './services/secure-storage.service';
 import { PdfReportService } from './services/pdf-report.service';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -104,6 +105,7 @@ export const MY_DATE_FORMATS = {
   providers: [
     AuthService,
     UserStoreService,
+    SecureStorageService,
     PdfReportService,
     AuthGuard,
     AdminGuard,

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { AUTH_CONSTANTS } from '../constants/auth.constants';
 
 @Injectable({ providedIn: 'root' })
 export class LoginGuard implements CanActivate {
@@ -13,7 +14,7 @@ export class LoginGuard implements CanActivate {
       map(isAuth => {
         if (isAuth) {
           // User is already authenticated, redirect to home
-          this.router.navigate(['/home']);
+          this.router.navigate([AUTH_CONSTANTS.ROUTES.HOME]);
           return false;
         }
         // User is not authenticated, allow access to login page
@@ -21,7 +22,8 @@ export class LoginGuard implements CanActivate {
       }),
       catchError((error) => {
         // If authentication check fails, allow access to login page
-        return [true];
+        console.warn('Login guard error:', error);
+        return of(true);
       })
     );
   }

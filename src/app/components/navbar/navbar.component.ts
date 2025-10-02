@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil, catchError, switchMap } from 'rxjs/operators';
+import { AUTH_CONSTANTS } from '../../constants/auth.constants';
 
 @Component({
   selector: 'app-navbar',
@@ -13,11 +14,12 @@ import { takeUntil, catchError, switchMap } from 'rxjs/operators';
 export class NavbarComponent implements OnInit, OnDestroy {
   isAdmin$: Observable<boolean>;
   isAuthenticated$: Observable<boolean>;
+  isLoading$: Observable<boolean>;
   private destroy$ = new Subject<void>();
 
   constructor(public auth: AuthService, private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Directly use the auth status observable that updates automatically on login/logout
     this.isAuthenticated$ = this.auth.authStatus$.pipe(
       takeUntil(this.destroy$),
@@ -36,31 +38,38 @@ export class NavbarComponent implements OnInit, OnDestroy {
       catchError(() => of(false))
     );
 
-    // Initialize authentication state on component load
-    this.auth.initializeAuthState().subscribe({
-      next: (isAuth) => {
-        // Auth state is already updated by initializeAuthState
-      },
-      error: (error) => {
-        // Authentication state initialization failed
-      }
-    });
+    // Subscribe to loading state for logout button
+    this.isLoading$ = this.auth.loadingState$.pipe(
+      takeUntil(this.destroy$),
+      switchMap(loadingState => of(loadingState.logout))
+    );
+
+    // Note: Auth initialization is now handled in app.component.ts
+    // This prevents redundant initialization calls
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  goHome() {
-    if (this.router.url === '/home') {
+  goHome(): void {
+    if (this.router.url === AUTH_CONSTANTS.ROUTES.HOME) {
       window.location.reload();
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate([AUTH_CONSTANTS.ROUTES.HOME]);
     }
   }
 
-  logout() {
-    this.auth.logout();
+  logout(): void {
+    this.auth.logout().subscribe({
+      next: () => {
+        // Logout successful, navigation is handled by the service
+      },
+      error: (error) => {
+        console.warn('Logout error:', error);
+        // Even if logout fails, the service will clear local state
+      }
+    });
   }
 }
